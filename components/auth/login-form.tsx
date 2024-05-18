@@ -24,6 +24,7 @@ export const LoginForm = () => {
     const [error,setError] = useState<string | undefined>("")
     const [success,setSuccess] = useState<string | undefined>("")
     const [isPending, startTransition] = useTransition()
+
     const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues : {
@@ -58,22 +59,27 @@ export const LoginForm = () => {
     }
 
     return (
-       <CardWrapper headerLabel="Welcome Back" backButtonLabel="Dont Haven't Any Account" backButtonHref="/auth/register" showSocial>
+       <CardWrapper 
+        headerLabel="Welcome Back!" 
+        backButtonLabel="Dont Haven't Any Account?" 
+        backButtonHref="/register" 
+        showSocial
+      >
             <Form {...form}>
                 <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="space-y-4">
                         {isTwoFactor && (
                              <FormField
-                             control={form.control}
-                             name="code"
-                             render={({ field }) => (
-                               <FormItem>
-                                 <FormLabel>Two Factor Code</FormLabel>
-                                 <FormControl>
-                                   <Input
-                                     {...field}
-                                     disabled={isPending}
-                                     placeholder="123456"
+                                control={form.control}
+                                name="code"
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>Two Factor Code</FormLabel>
+                                    <FormControl>
+                                      <Input
+                                        {...field}
+                                        disabled={isPending}
+                                        placeholder="123456"
                                    />
                                  </FormControl>
                                  <FormMessage />
@@ -123,7 +129,7 @@ export const LoginForm = () => {
                                     asChild
                                     className="px-0 font-normal"
                                   >
-                                    <Link href="/auth/reset">
+                                    <Link href="/reset">
                                       Forgot password?
                                     </Link>
                                   </Button>
@@ -137,6 +143,7 @@ export const LoginForm = () => {
                     </div>
                         <FormError message={error} />
                         <FormSuccess message={success} />
+                        {/* <FormSuccess message="Login Successful!" /> */}
                         <Button
                           disabled={isPending}
                           type="submit"

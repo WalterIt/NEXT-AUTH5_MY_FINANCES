@@ -4,6 +4,9 @@ import * as z from "zod";
 
 export const SettingsSchema = z.object({
     name:z.optional(z.string()),
+    // email:z.string().email({
+    //     message : "Email is Required!"
+    // }),
     email:z.optional(z.string().email()),
     isTwoFactorEnabled : z.optional(z.boolean()),
     role : z.enum([UserRole.ADMIN,UserRole.USER]),
