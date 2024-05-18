@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    container_name: local_finances
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+      
+
+  database:
+    image: postgres:latest
+    container_name: db_local_finances
+    ports:
+      - 5432:5432
+    restart: always
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: db_local_finances
+    volumes:
+      - db-local-finances:/var/lib/postgresql/data
+      
+  adminer:
+    image: adminer
+    restart: always
+    depends_on:
+      - database
+    ports:
+      - 8080:8080
+
+volumes:
+  db-local-finances:
+  
