@@ -53,9 +53,9 @@ export const RegisterForm = () => {
 
                         <FormField control={form.control} name="name" render={({ field }) => (
                             <FormItem>
-                                <FormLabel className="font-bold">Email</FormLabel>
+                                <FormLabel className="font-bold">Name</FormLabel>
                                     <FormControl>
-                                        <Input disabled={isPending} {...field} placeholder="Your Name..." type="name"/>
+                                        <Input disabled={isPending} {...field} placeholder="Your Name..." />
                                     </FormControl>
                                     <FormMessage />
                         </FormItem>
