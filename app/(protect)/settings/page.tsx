@@ -1,4 +1,4 @@
-"use client"
+// "use client"
 
 import * as z from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -17,42 +17,46 @@ import { FormError } from '@/components/form-error'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { UserRole } from '@prisma/client'
 import { Switch } from '@/components/ui/switch'
-
-const SettingPage = () => {
-  const user = useCurrentUser()
-  const [success, setSuccess] = useState<string | undefined>()
-  const [error, setError] = useState<string | undefined>()
-  const { update } = useSession()
-  const [isPending, startTransition] = useTransition()
+import { auth } from '@/auth'
 
 
-  const form = useForm<z.infer<typeof SettingsSchema>>({
-    resolver: zodResolver(SettingsSchema),
-    defaultValues: {
-      name: user?.name || undefined,
-      email: user?.email || undefined,
-      isTwoFactorEnabled: user?.isTwoFactorEnabled,
-      role: user?.role,
-      password: undefined,
-      newPassword: undefined
-    }
-  })
 
-  const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
-    startTransition(() => {
-      settings(values)
-        .then((data) => {
-          if (data?.error) {
-            setError(data.error)
-          }
-          if (data?.success) {
-            update()
-            setSuccess(data.success)
-          }
-        })
-        .catch(() => setError("Something Went Wrong"))
-    })
-  }
+const SettingPage = async () => {
+  // const user = useCurrentUser()
+  // const [success, setSuccess] = useState<string | undefined>()
+  // const [error, setError] = useState<string | undefined>()
+  const session = await auth()
+  // const { update } = useSession()
+  // const [isPending, startTransition] = useTransition()
+
+
+  // const form = useForm<z.infer<typeof SettingsSchema>>({
+  //   resolver: zodResolver(SettingsSchema),
+  //   defaultValues: {
+  //     name: user?.name || undefined,
+  //     email: user?.email || undefined,
+  //     isTwoFactorEnabled: user?.isTwoFactorEnabled,
+  //     role: user?.role,
+  //     password: undefined,
+  //     newPassword: undefined
+  //   }
+  // })
+
+  // const onSubmit = (values: z.infer<typeof SettingsSchema>) => {
+  //   startTransition(() => {
+  //     settings(values)
+  //       .then((data) => {
+  //         if (data?.error) {
+  //           setError(data.error)
+  //         }
+  //         if (data?.success) {
+  //           update()
+  //           setSuccess(data.success)
+  //         }
+  //       })
+  //       .catch(() => setError("Something Went Wrong"))
+  //   })
+  // }
 
   return (
     <Card className='w-[600px]'>
@@ -60,7 +64,9 @@ const SettingPage = () => {
         <p className='text-2xl text-center font-bold'>🔑 Settings</p>
       </CardHeader>
       <CardContent>
-        <Form {...form}>
+
+        {JSON.stringify(session)}
+        {/* <Form {...form}>
           <form className='space-y-6' onSubmit={form.handleSubmit(onSubmit)}>
             <div className='space-y-4'>
               <FormField
@@ -194,7 +200,7 @@ const SettingPage = () => {
             <FormError message={error} />
             <Button type='submit' disabled={isPending}>Save</Button>
           </form>
-        </Form>
+        </Form> */}
       </CardContent>
     </Card>
   )

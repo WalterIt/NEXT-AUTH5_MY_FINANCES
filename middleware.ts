@@ -8,7 +8,7 @@ import {
   prefixRoutes,
   DEFAULT_REDIRECT_ROUTES,
   authRoutes
-} from "@/route"
+} from "@/routes"
 import { useSession } from "next-auth/react";
 
 
@@ -17,6 +17,9 @@ const { auth } = NextAuth(authConfig)
 export default auth ((req) => {
     const { nextUrl } = req
     const isLoggedIn = !!req.auth 
+
+    // console.log(`ROUTE:  ${req.nextUrl.pathname}`)
+    // console.log(`User Logged In: ${isLoggedIn}`)
    
    
     const isApiRoutes = nextUrl.pathname.startsWith(prefixRoutes)
@@ -24,7 +27,7 @@ export default auth ((req) => {
     const isAuthRoutes = authRoutes.includes(nextUrl.pathname)
 
     if (isApiRoutes) {
-      return
+      return 
     }
     
   
@@ -43,15 +46,22 @@ export default auth ((req) => {
     // }
       
     if ( !isLoggedIn && !isPublicRoutes ) {
-      let callbackUrl = nextUrl.pathname
-      if (nextUrl.search) {
-        callbackUrl += nextUrl.search
-      }
-
-      const encodeCallbackUrl = encodeURIComponent(callbackUrl)
-
-      return Response.redirect(new URL(`/auth/login?callbackUrl=${encodeCallbackUrl}`, nextUrl))
+      return Response.redirect(new URL("/login", nextUrl))
     }
+
+    return ;
+
+
+    // if ( !isLoggedIn && !isPublicRoutes ) {
+    //   let callbackUrl = nextUrl.pathname
+    //   if (nextUrl.search) {
+    //     callbackUrl += nextUrl.search
+    //   }
+
+    //   const encodeCallbackUrl = encodeURIComponent(callbackUrl)
+
+    //   return Response.redirect(new URL(`/login?callbackUrl=${encodeCallbackUrl}`, nextUrl))
+    // }
 
   
   

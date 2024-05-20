@@ -6,11 +6,11 @@ export const publicRoutes = [
 
 
 export const authRoutes = [
-    "/auth/login",
-    "/auth/register",
-    "/auth/reset",
-    "/auth/new-password",
-    "/auth/new-verification"
+    "/login",
+    "/register",
+    "/reset",
+    "/new-password",
+    "/new-verification"
 ]
 
 export const prefixRoutes = "/api/auth"

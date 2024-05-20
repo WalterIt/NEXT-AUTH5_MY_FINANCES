@@ -4,7 +4,7 @@ import { Button } from "../ui/button"
 import { FcGoogle } from "react-icons/fc"
 import { FaGithub } from "react-icons/fa"
 import { signIn } from "next-auth/react"
-import { DEFAULT_REDIRECT_ROUTES } from "@/route"
+import { DEFAULT_REDIRECT_ROUTES } from "@/routes"
 import { useSearchParams } from "next/navigation"
 
 export const Social = () => {

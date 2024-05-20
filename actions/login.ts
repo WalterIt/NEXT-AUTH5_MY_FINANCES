@@ -4,8 +4,8 @@ import { db } from "@/lib/db";
 import { AuthError } from "next-auth";
 import { LoginSchema } from "@/schemas";
 import { signIn } from "@/auth";
-import { DEFAULT_REDIRECT_ROUTES } from "@/route";
-import { getUserByEmail } from "@/data/data";
+import { DEFAULT_REDIRECT_ROUTES } from "@/routes";
+import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken, generateTwoFactorToken } from "@/lib/tokens";
 import { sendVerificationEmail, sendTwoFactorToken} from "@/lib/mail";
 import { getTwoFactorTokenByEmail } from "@/data/two-factor-token";
@@ -19,12 +19,12 @@ export const login = async (values : z.infer<typeof LoginSchema>, callbackUrl?: 
         return { error : "Invalid Fields!" }
     }
 
-    const { email, password, code} = validateFields.data
-    const existingUser = await getUserByEmail(email)
+    const { email, password} = validateFields.data
+    // const existingUser = await getUserByEmail(email)
 
-    if (!existingUser || !existingUser.email || !existingUser.password) { 
-        return { error : "Email Is Not Exist" }
-    }
+    // if (!existingUser || !existingUser.email || !existingUser.password) { 
+    //     return { error : "Invalid Email or Password!" }
+    // }
 
     // if (!existingUser.emailVerified) {
     //     const verificationToken = await generateVerificationToken(email)
@@ -75,7 +75,8 @@ export const login = async (values : z.infer<typeof LoginSchema>, callbackUrl?: 
         await signIn("credentials", {
             email,
             password,
-            redirectTo : callbackUrl || DEFAULT_REDIRECT_ROUTES
+            redirectTo : DEFAULT_REDIRECT_ROUTES
+            // redirectTo : callbackUrl || DEFAULT_REDIRECT_ROUTES
         }) 
     } catch (error) {
         if (error instanceof AuthError) {

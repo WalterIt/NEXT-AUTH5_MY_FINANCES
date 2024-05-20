@@ -24,13 +24,13 @@ if (mode === "modal") {
       </DialogTrigger>
       <DialogContent className="w-auto p-0 bg-transparent border-none">
         <LoginForm />
-      </DialogContent>
+      </DialogContent> 
     </Dialog>
   )
 }
 
 function handleClick() {
-    router.push("/auth/login")
+    router.push("/login")
 }
 
   return (
