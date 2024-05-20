@@ -45,14 +45,14 @@ export const LoginForm = () => {
                         setError(data.error)
                     }
 
-                    if (data?.success) {
-                        form.reset()
-                        setSuccess(data.success)
-                    }
+                    // if (data?.success) {
+                    //     form.reset()
+                    //     setSuccess(data.success)
+                    // }
 
-                    if (data?.twoFactor) {
-                        setTwoFactor(true)
-                    }
+                    // if (data?.twoFactor) {
+                    //     setTwoFactor(true)
+                    // }
                 })
                 .catch(() => setError("Something Went Wrong"))
         }) 
@@ -62,7 +62,7 @@ export const LoginForm = () => {
        <CardWrapper 
         headerLabel="Welcome Back!" 
         backButtonLabel="Dont Haven't Any Account?" 
-        backButtonHref="/register" 
+        backButtonHref="/auth/register" 
         showSocial
       >
             <Form {...form}>
