@@ -4,6 +4,8 @@ import { useRouter } from 'next/navigation'
 import React from 'react'
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { LoginForm } from './login-form';
+import { useCurrentUser } from '@/hooks/use-current-user'
+import { DEFAULT_REDIRECT_ROUTES } from '@/routes';
 
 
 interface LoginButtonProps {
@@ -13,8 +15,13 @@ interface LoginButtonProps {
 }
 
 const LoginButton = ({children, mode = "redirect", asChild} : LoginButtonProps) => {
+  const user = useCurrentUser();
+
+  // console.log(user)
 
 const router = useRouter()
+
+if (user) mode = "redirect"
 
 if (mode === "modal") {
   return (
@@ -30,6 +37,7 @@ if (mode === "modal") {
 }
 
 function handleClick() {
+  
     router.push("/login")
 }
 

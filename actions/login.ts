@@ -13,12 +13,15 @@ import { getTokenConfirmationByUserId } from "@/data/two-factor-confirmation";
 
 
 
-export const login = async (values : z.infer<typeof LoginSchema>, callbackUrl?: string | null) => {
+// export const login = async (values : z.infer<typeof LoginSchema>, callbackUrl?: string | null) => {
+    export const login = async (values : z.infer<typeof LoginSchema>) => {
     const validateFields = LoginSchema.safeParse(values)
     if (!validateFields.success) {
         return { error : "Invalid Fields!" }
     }
-
+    
+    // return { success: "Now you are logged in!" }
+    
     const { email, password} = validateFields.data
     // const existingUser = await getUserByEmail(email)
 

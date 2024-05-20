@@ -17,10 +17,10 @@ import Link from "next/link";
 
 
 export const LoginForm = () => {
-    const searchParams = useSearchParams()
-    const callbackUrl = searchParams.get("callbackUrl")
+    // const searchParams = useSearchParams()
+    // const callbackUrl = searchParams.get("callbackUrl")
     // const urlError = searchParams.get("error") === "OAuthAccountNotLinked" ? "Something went wrong!!" : "";
-    const [isTwoFactor,setTwoFactor] = useState(false)
+    // const [isTwoFactor,setTwoFactor] = useState(false)
     const [error,setError] = useState<string | undefined>("")
     const [success,setSuccess] = useState<string | undefined>("")
     const [isPending, startTransition] = useTransition()
@@ -38,7 +38,7 @@ export const LoginForm = () => {
         setSuccess("")
 
         startTransition(() => {
-            login(values, callbackUrl)
+            login(values)
                 .then((data) => {
                     if (data?.error) {
                         form.reset()
@@ -47,7 +47,7 @@ export const LoginForm = () => {
 
                     // if (data?.success) {
                     //     form.reset()
-                    //     setSuccess(data.success)
+                    //     setSuccess(data?.success)
                     // }
 
                     // if (data?.twoFactor) {
@@ -68,7 +68,7 @@ export const LoginForm = () => {
             <Form {...form}>
                 <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
                     <div className="space-y-4">
-                        {isTwoFactor && (
+                        {/* {isTwoFactor && (
                              <FormField
                                 control={form.control}
                                 name="code"
@@ -86,10 +86,10 @@ export const LoginForm = () => {
                                </FormItem>
                              )}
                            />
-                        )}
+                        )} */}
 
 
-                        {!isTwoFactor && (
+                        {/* {!isTwoFactor && ( */}
                         <>
                             <FormField
                               control={form.control}
@@ -138,7 +138,6 @@ export const LoginForm = () => {
                               )}
                             />
                         </>
-                        )}
 
                     </div>
                         <FormError message={error} />
@@ -149,7 +148,8 @@ export const LoginForm = () => {
                           type="submit"
                           className="w-full"
                         >
-                          {isTwoFactor ? "Confirm" : "Login"}
+                          Login
+                          {/* {isTwoFactor ? "Confirm" : "Login"} */}
                         </Button>
                 </form>
             </Form>
