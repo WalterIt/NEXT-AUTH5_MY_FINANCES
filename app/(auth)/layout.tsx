@@ -2,7 +2,7 @@ import React from 'react'
 
 const LayoutPage = ({children} : {children : React.ReactNode}) => {
   return (
-    <div className='flex h-full justify-center items-center'>
+    <div className="min-h-screen grid grid-cols-1 lg:grid-cols-2">
         {children}
     </div>
   )
