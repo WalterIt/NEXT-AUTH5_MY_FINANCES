@@ -36,7 +36,7 @@ const AdminPage = () => {
   return (
     <Card className='w-[600px]'>
         <CardHeader>
-            <p className='text-2xl text-center font-bold'>🔑 Admin</p>
+            <p className='text-2xl text-center font-bold'>🔑 Admin - 僕</p>
         </CardHeader>
         <CardContent>
             <RoleGate allowedRole={UserRole.ADMIN}>
