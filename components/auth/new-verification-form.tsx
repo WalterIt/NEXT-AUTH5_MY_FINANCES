@@ -22,14 +22,14 @@ export const NewVerificationForm = () => {
             return;
         }
 
-        newVerification(token)
-            .then((data) => {
-                setError(data.error)
-                setSuccess(data.success)
-            })
-            .catch(() => {
-                setError("Something went wrong!")
-            })
+        // newVerification(token)
+        //     .then((data) => {
+        //         setError(data.error)
+        //         setSuccess(data.success)
+        //     })
+        //     .catch(() => {
+        //         setError("Something went wrong!")
+        //     })
     }, [token])
     
     useEffect(() => {

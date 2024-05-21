@@ -17,20 +17,20 @@ export const newPassword = async (values: z.infer<typeof NewPasswordSchema>, tok
     const {password} = validateFields.data
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const existingToken = await getResetPasswordTokenByToken(token)
-    if(!existingToken) return {error : "Invalid Token!"}
+    // const existingToken = await getResetPasswordTokenByToken(token)
+    // if(!existingToken) return {error : "Invalid Token!"}
 
-    const existingUser = await getUserByEmail(existingToken.email)
-    if(!existingUser) return { error: "Email Doesn't Exist" }
+    // const existingUser = await getUserByEmail(existingToken.email)
+    // if(!existingUser) return { error: "Email Doesn't Exist" }
 
-    await db.user.update({
-        where : {id : existingUser.id},
-        data : {password : hashedPassword}
-    })
+    // await db.user.update({
+    //     where : {id : existingUser.id},
+    //     data : {password : hashedPassword}
+    // })
 
-    await db.resetPasswordToken.delete({
-        where : {id : existingToken.id}
-    })
+    // await db.resetPasswordToken.delete({
+    //     where : {id : existingToken.id}
+    // })
 
     return {success : "Password Updated!"}
 }

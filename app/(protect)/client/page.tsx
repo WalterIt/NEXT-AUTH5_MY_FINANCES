@@ -9,7 +9,7 @@ const Server = async  () => {
     const user = await useUserInfo()
 
   return (
-    <UserInfo label='Client Component' user={user} />
+    <UserInfo label='Client Component 1' user={user} />
   )
 }
 

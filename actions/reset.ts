@@ -29,7 +29,7 @@ export const reset = async (values : z.infer<typeof ResetSchema>) => {
     // TODO
 
     const resetPasswordToken = await generateResetPasswordToken(email)
-    await sendResetPasswordEmail(resetPasswordToken.email, resetPasswordToken.token)
+    // await sendResetPasswordEmail(resetPasswordToken.email, resetPasswordToken.token)
 
     return {success : "Reset Email Sent"}
 }

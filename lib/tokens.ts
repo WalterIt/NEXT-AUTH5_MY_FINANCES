@@ -10,21 +10,21 @@ export const generateTwoFactorToken = async (email: string) => {
     const expires = new Date(new Date().getTime() + 300 * 1000);
 
     const existingToken = await getTwoFactorTokenByEmail(email);
-    if (existingToken) {
-        await db.twoFactorToken.delete({
-            where: { id : existingToken.id }
-        })
-    }
+    // if (existingToken) {
+    //     await db.twoFactorToken.delete({
+    //         where: { id : existingToken.id }
+    //     })
+    // }
 
-    const twoFactorToken = await db.twoFactorToken.create({
-        data: {
-            email,
-            token,
-            expires
-        }
-    })
+    // const twoFactorToken = await db.twoFactorToken.create({
+    //     data: {
+    //         email,
+    //         token,
+    //         expires
+    //     }
+    // })
 
-    return twoFactorToken
+    // return twoFactorToken
 }
 
 export const generateResetPasswordToken = async (email: string) => {
@@ -33,21 +33,21 @@ export const generateResetPasswordToken = async (email: string) => {
     
     const existingToken = await getResetPasswordTokenByEmail(email)
     
-    if(existingToken) {
-        await db.resetPasswordToken.delete({
-            where: { id : existingToken.id }
-        })
-    }
+    // if(existingToken) {
+    //     await db.resetPasswordToken.delete({
+    //         where: { id : existingToken.id }
+    //     })
+    // }
 
-    const resetPasswordToken = await db.resetPasswordToken.create({
-        data: {
-          email,
-          token,
-          expires
-        }
-      });
+    // const resetPasswordToken = await db.resetPasswordToken.create({
+    //     data: {
+    //       email,
+    //       token,
+    //       expires
+    //     }
+    //   });
       
-      return resetPasswordToken;
+    //   return resetPasswordToken;
 }
 
 export const generateVerificationToken = async (email: string) => {
@@ -56,19 +56,19 @@ export const generateVerificationToken = async (email: string) => {
     
     const existingToken = await getVerificationTokenByEmail(email)
 
-    if (existingToken) { 
-        await db.verificationToken.delete({
-            where: { id : existingToken.id }
-        })
-    }
+    // if (existingToken) { 
+    //     await db.verificationToken.delete({
+    //         where: { id : existingToken.id }
+    //     })
+    // }
 
-    const verificationToken = await db.verificationToken.create({
-        data: { 
-            email,
-            token,
-            expires
-        }
-    })
+    // const verificationToken = await db.verificationToken.create({
+    //     data: { 
+    //         email,
+    //         token,
+    //         expires
+    //     }
+    // })
 
-    return verificationToken;
+    // return verificationToken;
 }
