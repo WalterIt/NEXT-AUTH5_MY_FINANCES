@@ -1,6 +1,11 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-# SIMPLE NEXT-AUTH 5 AUTHENTICATION - PROTECTED ROUTES: WITHOUT Social Medias Login
+# NEXT-AUTH 5 AUTHENTICATION - PROTECTED ROUTES: OAuth (Google & Github):
+
+1. Resend (Sending emails)
+2. Email verification
+3. Reset password email
+4. Reset password form
 
 ## Getting Started
 
