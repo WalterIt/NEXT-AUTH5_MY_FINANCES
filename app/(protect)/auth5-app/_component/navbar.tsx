@@ -13,19 +13,19 @@ const Navbar = () => {
     <div className='w-[600px] flex justify-between items-center bg-white p-3 rounded-xl'>
         <div className='flex gap-x-2'>
             <Button variant={pathname === "/server" ? "default" : "outline"} asChild>
-                <Link href="/server">Server</Link>
+                <Link href="/auth5-app/server">Server</Link>
             </Button>
 
             <Button variant={pathname === "/client" ? "default" : "outline"} asChild>
-                <Link href="/client">Client</Link>
+                <Link href="/auth5-app/client">Client</Link>
             </Button>
 
             <Button variant={pathname === "/admin" ? "default" : "outline"} asChild>
-                <Link href="/admin">Admin</Link>
+                <Link href="/auth5-app/admin">Admin</Link>
             </Button>
 
             <Button variant={pathname === "/settings" ? "default" : "outline"} asChild>
-                <Link href="/settings">Settings</Link>
+                <Link href="/auth5-app/settings">Settings</Link>
             </Button>
         </div>
         <UserButton />

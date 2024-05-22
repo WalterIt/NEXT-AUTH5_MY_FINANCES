@@ -10,7 +10,9 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@auth/core": "^0.31.0",
     "@auth/prisma-adapter": "^1.5.2",
+    "@hono/auth-js": "^1.0.7",
     "@hono/zod-validator": "^0.2.1",
     "@hookform/resolvers": "^3.3.4",
     "@prisma/client": "^5.11.0",

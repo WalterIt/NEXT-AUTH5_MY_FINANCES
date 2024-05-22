@@ -7,6 +7,7 @@ import {
   publicRoutes,
   prefixRoutes,
   DEFAULT_REDIRECT_ROUTES,
+  honoRoutes,
   authRoutes
 } from "@/routes"
 import { useSession } from "next-auth/react";
@@ -22,9 +23,12 @@ export default auth ((req) => {
     // console.log(`User Logged In: ${isLoggedIn}`)
    
    
+    const isApiHoneRoutes = nextUrl.pathname.startsWith(honoRoutes)
     const isApiRoutes = nextUrl.pathname.startsWith(prefixRoutes)
     const isPublicRoutes = publicRoutes.includes(nextUrl.pathname)
     const isAuthRoutes = authRoutes.includes(nextUrl.pathname)
+
+    if(isApiHoneRoutes) return;
 
     if (isApiRoutes) {
       return 
@@ -38,12 +42,12 @@ export default auth ((req) => {
       return
     }
 
-    // if(isPublicRoutes) {
-    //   if(isLoggedIn) { 
-    //     return NextResponse.redirect(new URL(DEFAULT_REDIRECT_ROUTES, nextUrl))
-    //   }
-    //   return
-    // }
+    if(isPublicRoutes) {
+      if(isLoggedIn) { 
+        return NextResponse.redirect(new URL(DEFAULT_REDIRECT_ROUTES, nextUrl))
+      }
+      return
+    }
       
     if ( !isLoggedIn && !isPublicRoutes ) {
       return Response.redirect(new URL("/login", nextUrl))
