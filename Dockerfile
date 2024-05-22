@@ -9,6 +9,7 @@ COPY package.json ./
 
 # Instale as dependências do projeto
 RUN npm install --force
+RUN npm install next
 
 # Copie todo o código-fonte do Next.js para o contêiner
 COPY . .
