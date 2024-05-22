@@ -1,7 +1,7 @@
 "use client"
 
 import { useCurrentRole } from '@/hooks/use-current-role'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '@prisma/client';
 import React from 'react'
 import { FormError } from '../form-error'
 

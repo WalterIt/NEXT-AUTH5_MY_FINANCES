@@ -7,9 +7,6 @@ import { Card,CardContent,CardHeader } from '@/components/ui/card';
 import { UserRole } from '@prisma/client';
 import { toast } from 'sonner';    
 import React from 'react'
-
-
-
 const AdminPage = () => {
 
     function onClickServerAction() {

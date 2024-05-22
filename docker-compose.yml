@@ -1,11 +1,11 @@
-version: "3.8"
+# version: "3.8"
 
 services:
   app:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: local_finances
+    container_name: local_finances_v0
     ports:
       - 3000:3000
     volumes:
