@@ -7,27 +7,18 @@ import { authHandler, initAuthConfig, verifyAuth, type AuthConfig } from "@hono/
 import GitHub from "@auth/core/providers/github"
 import Google from "@auth/core/providers/google"
 
+
+import authors from './authors'
+import books from './books'
+
 export const runtime = 'edge';
 
 const app = new Hono().basePath('/api')
 
 // const app = new Hono()
 
-app.use("*", initAuthConfig(getAuthConfig))
-
-app.use("/api/*", authHandler())
-// app.use("/api/auth/*", authHandler())
-
-app.use('/api/*', verifyAuth())
-
-
-app.get('/api/protected', (c) => {
-  const auth = c.get("authUser")
-  console.log(auth)
-  return c.json(auth)
-})
-
-
+app.route('/authors', authors)
+app.route('/books', books)
 
 app.get('/hello', (c) => {
   return c.json({
@@ -43,6 +34,39 @@ zValidator("param", z.object({ name: z.string() })
     message: `Hello,  ${name}!`,
   })
 })
+
+app.use("*", initAuthConfig(c=>({
+  secret: c.env.AUTH_SECRET,
+  providers: [
+    GitHub({
+      clientId: c.env.GITHUB_ID,
+      clientSecret: c.env.GITHUB_SECRET
+    }),
+    Google({
+      clientId: c.env.GOOGLE_CLIENT_ID,
+      clientSecret: c.env.GOOGLE_CLIENT_SECRET
+    }),
+  ],
+})))
+
+app.use("/auth/*", authHandler())
+
+app.use("/*", verifyAuth())
+
+app.get("/protected", async (c)=> {
+    const auth = c.get("authUser")
+    if(!auth) {
+      return c.json({
+        error: "Unauthorized!"
+      })
+    }
+    return c.json(auth?.session?.user)
+})
+
+
+
+
+
 
 
 function getAuthConfig(c: Context): AuthConfig {
