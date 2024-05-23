@@ -13,7 +13,7 @@ RUN npm install --force
 # Copie todo o código-fonte do Next.js para o contêiner
 COPY . .
 
-RUN npm run build
+# RUN npm run build
 
 COPY . .
 
