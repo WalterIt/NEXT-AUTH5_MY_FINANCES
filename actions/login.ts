@@ -23,11 +23,11 @@ import { getTokenConfirmationByUserId } from "@/data/two-factor-confirmation";
     // return { success: "Now you are logged in!" }
     
     const { email, password} = validateFields.data
-    // const existingUser = await getUserByEmail(email)
+    const existingUser = await getUserByEmail(email)
 
-    // if (!existingUser || !existingUser.email || !existingUser.password) { 
-    //     return { error : "Invalid Email or Password!" }
-    // }
+    if (!existingUser || !existingUser.email || !existingUser.password) { 
+        return { error : "Invalid Email or Password!" }
+    }
 
     // if (!existingUser.emailVerified) {
     //     const verificationToken = await generateVerificationToken(email)
@@ -75,12 +75,17 @@ import { getTokenConfirmationByUserId } from "@/data/two-factor-confirmation";
 
 
     try {
+
+        console.log(email, password);
+
+
         await signIn("credentials", {
             email,
             password,
             redirectTo : DEFAULT_REDIRECT_ROUTES
             // redirectTo : callbackUrl || DEFAULT_REDIRECT_ROUTES
         }) 
+
     } catch (error) {
         if (error instanceof AuthError) {
             switch(error.type) {

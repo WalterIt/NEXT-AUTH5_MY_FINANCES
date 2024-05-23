@@ -6,7 +6,9 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet"
 import { useMedia } from "react-use"
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { Menu } from "lucide-react";
+import { FcMenu } from "react-icons/fc";
+import { AiOutlineMenu } from "react-icons/ai";
+// import { Menu } from "lucide-react";
 
 const routes = [
     {
@@ -54,7 +56,7 @@ export const Navigation = () => {
                         onClick={() => setIsOpen(!isOpen)}
                         className="font-normal bg-white/10 hover:bg-white/20 hover:text-white border-none focus-visible:ring-offset-0 focus-visible:ring-transparent outline-none text-white focus:bg-white/30 transition"
                     >
-                        <Menu className="size-4" /> 
+                         <AiOutlineMenu  className="size-4"  />
                     </Button>
                 </SheetTrigger>
                 <SheetContent side="left" className="px-2">

@@ -13,7 +13,7 @@ export default async function Home() {
   return (
     <main className="flex flex-col justify-center items-center h-full">
       <div className="space-y-6 text-center text-blue-600">
-      <UserButton /> {user?.name}
+      <UserButton /> 
         <h1 className=" text-9xl font-bold drop-shadow-lg">Auth</h1>
         <p>A Simple Authentication</p>
         <p className="text-3xl text-rose-700">This is protected Page!</p>

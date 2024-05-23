@@ -35,33 +35,33 @@ zValidator("param", z.object({ name: z.string() })
   })
 })
 
-app.use("*", initAuthConfig(c=>({
-  secret: c.env.AUTH_SECRET,
-  providers: [
-    GitHub({
-      clientId: c.env.GITHUB_ID,
-      clientSecret: c.env.GITHUB_SECRET
-    }),
-    Google({
-      clientId: c.env.GOOGLE_CLIENT_ID,
-      clientSecret: c.env.GOOGLE_CLIENT_SECRET
-    }),
-  ],
-})))
+// app.use("*", initAuthConfig(c=>({
+//   secret: c.env.AUTH_SECRET,
+//   providers: [
+//     GitHub({
+//       clientId: c.env.GITHUB_ID,
+//       clientSecret: c.env.GITHUB_SECRET
+//     }),
+//     Google({
+//       clientId: c.env.GOOGLE_CLIENT_ID,
+//       clientSecret: c.env.GOOGLE_CLIENT_SECRET
+//     }),
+//   ],
+// })))
 
-app.use("/auth/*", authHandler())
+// app.use("/auth/*", authHandler())
 
 app.use("/*", verifyAuth())
 
-app.get("/protected", async (c)=> {
-    const auth = c.get("authUser")
-    if(!auth) {
-      return c.json({
-        error: "Unauthorized!"
-      })
-    }
-    return c.json(auth?.session?.user)
-})
+// app.get("/protected", async (c)=> {
+//     const auth = c.get("authUser")
+//     if(!auth) {
+//       return c.json({
+//         error: "Unauthorized!"
+//       })
+//     }
+//     return c.json(auth?.session?.user)
+// })
 
 
 

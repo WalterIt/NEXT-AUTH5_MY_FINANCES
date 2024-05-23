@@ -21,12 +21,13 @@ export const UserButton = () => {
   const user = useCurrentUser();
 
   return (
-    <DropdownMenu>
+    <>
+    <DropdownMenu >
       <DropdownMenuTrigger>
         <Avatar>
           <AvatarImage src={user?.image || ""} />
-          <AvatarFallback className="bg-sky-500">
-            <FaUser className="text-white" />
+          <AvatarFallback className="bg-sky-500 ">
+            <FaUser className="text-white " />
           </AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
@@ -38,6 +39,8 @@ export const UserButton = () => {
           </DropdownMenuItem>
         </LogoutButton>
       </DropdownMenuContent>
-    </DropdownMenu>
+    </DropdownMenu>{" "}
+    {user?.name}
+    </>
   );
 };
