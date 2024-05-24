@@ -1,4 +1,4 @@
-# version: "3.8"
+version: "3.9"
 
 services:
   app:
@@ -11,6 +11,27 @@ services:
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
+    environment:
+      DRIZZLE_DATABASE_URL: postgres://postgres:postgres@postgres:5432/neon
+
+  postgres:
+    image: postgres:14
+    environment:
+      POSTGRES_PASSWORD: postgres
+  drizzle:
+    # build: .
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - postgres
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@postgres:5432/neon
+    # ports:
+    #   - 3000:3000
+    # volumes:
+    #   - .:/usr/src/app
+    #   - /usr/src/app/node_modules
       
 
   database:
