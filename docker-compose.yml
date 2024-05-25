@@ -5,20 +5,21 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: local_finances
+    container_name: local_finances_v0.3.3
     ports:
       - "3000:3000"
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
     environment:
+      # Atualize a URL de conexão do Prisma para apontar para o serviço 'database'
       DATABASE_URL: postgres://docker:docker@database:5432/db_local_finances
     depends_on:
       - database
 
   database:
-    image: postgres:latest
-    container_name: db_local_finances_v0.3.2
+    image: neondatabase/vm-postgres-16-bullseye
+    container_name: db_local_finances_v0.3.3
     ports:
       - "5432:5432"
     restart: always
@@ -28,6 +29,19 @@ services:
       POSTGRES_DB: db_local_finances
     volumes:
       - db-local-finances:/var/lib/postgresql/data
+
+  prisma:
+    image: neondatabase/vm-postgres-16-bullseye  # Use a imagem idêntica ao 'database'
+    container_name: prisma
+    # Não mapeie nenhuma porta para o Prisma (já que ele acessará o banco de dados interno)
+    # volumes:  # Não é necessário volume separado para Prisma, pois acessa o mesmo banco de dados
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: db_local_finances
+    depends_on:
+      - database  # Inicie o Prisma após o 'database' estar pronto
+
 
   adminer:
     image: adminer
