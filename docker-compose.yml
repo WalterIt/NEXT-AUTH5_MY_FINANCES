@@ -1,26 +1,22 @@
-version: "3.9"
 
 services:
   app:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: local_finances_v0.3.2
+    container_name: local_finances_v0.3.3
     ports:
-      - "3000:3000"
+      - 3000:3000
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-    environment:
-      DATABASE_URL: postgres://docker:docker@database:5432/db_local_finances
-    depends_on:
-      - database
+    
 
   database:
     image: postgres:latest
-    container_name: db_local_finances_v0.3.2
+    container_name: db_local_finances
     ports:
-      - "5432:5432"
+      - 5432:5432
     restart: always
     environment:
       POSTGRES_USER: docker
@@ -28,14 +24,15 @@ services:
       POSTGRES_DB: db_local_finances
     volumes:
       - db-local-finances:/var/lib/postgresql/data
-
+      
   adminer:
     image: adminer
     restart: always
     depends_on:
       - database
     ports:
-      - "8080:8080"
+      - 8080:8080
 
 volumes:
   db-local-finances:
+  
