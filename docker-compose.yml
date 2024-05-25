@@ -32,7 +32,7 @@ services:
 
   prisma:
     image: neondatabase/vm-postgres-16-bullseye  # Use a imagem idêntica ao 'database'
-    container_name: prisma
+    container_name: prisma_local_finances
     # Não mapeie nenhuma porta para o Prisma (já que ele acessará o banco de dados interno)
     # volumes:  # Não é necessário volume separado para Prisma, pois acessa o mesmo banco de dados
     environment:
