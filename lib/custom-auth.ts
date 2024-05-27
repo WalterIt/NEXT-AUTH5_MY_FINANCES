@@ -1,5 +1,3 @@
-
-
 import { auth } from "@/auth";
 
 export const currentRole = async () => {
@@ -9,5 +7,9 @@ export const currentRole = async () => {
 
 export const currentUser = async () => {
     const session = await auth();
+
+    console.log('CURRENT USER: ', session?.user) 
+
+
     return session?.user
 }

@@ -4,7 +4,7 @@ import { useUserInfo } from '@/hooks/user-info'
 
 const Server = async () => {
     const user = await useUserInfo()
-    console.log(user);
+    // console.log(user);
     
 
   return (

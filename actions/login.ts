@@ -76,9 +76,6 @@ import { getTokenConfirmationByUserId } from "@/data/two-factor-confirmation";
 
     try {
 
-        console.log(email, password);
-
-
         await signIn("credentials", {
             email,
             password,
