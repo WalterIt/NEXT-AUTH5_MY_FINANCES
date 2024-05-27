@@ -1,9 +1,10 @@
 import { Hono, Context } from "hono";
+import { HTTPException } from "hono/http-exception";
+import { authHandler, initAuthConfig, verifyAuth, type AuthConfig } from "@hono/auth-js"
 import { handle } from "hono/vercel";
 import { z } from "zod";
 import { zValidator } from "@hono/zod-validator";
 
-import { authHandler, initAuthConfig, verifyAuth, type AuthConfig } from "@hono/auth-js"
 import GitHub from "@auth/core/providers/github"
 import Google from "@auth/core/providers/google"
 
@@ -13,6 +14,14 @@ import accounts from './accounts'
 export const runtime = 'edge';
 
 const app = new Hono().basePath('/api')
+
+app.onError((err, c) => {
+  if (err instanceof HTTPException) {
+    return err.getResponse();
+  }
+
+  return c.json({ message: "Internal Server Error!" }, 500);
+});
 
 const routes = app
   .route('/accounts', accounts)

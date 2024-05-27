@@ -7,7 +7,7 @@ import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 // import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
-import { currentUser } from "@/lib/custom-auth";
+import { currentUser } from "@/lib/custom-auth"; 
 import { getUserById } from "@/data/user";
 
 
@@ -20,7 +20,7 @@ const app = new Hono()
 
     if (!user?.id) {
       throw new HTTPException(401, {
-        res: c.json({ message: "Unauthorized" }, 401),
+        res: c.json({ message: "Unauthorized!" }, 401),
       });
     }
     const data = await db1
@@ -29,7 +29,7 @@ const app = new Hono()
         name: accounts.name,
       })
       .from(accounts)
-      // .where(eq(accounts.userId, auth.userId));
+      .where(eq(accounts.userId, user?.id));
     return c.json({data});
   })
 //   .get(
