@@ -5,7 +5,7 @@ import { accounts, insertAccountSchema } from "@/db/schema";
 // import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
-// import { createId } from "@paralleldrive/cuid2";
+import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
 import { currentUser } from "@/lib/custom-auth"; 
 import { getUserById } from "@/data/user";
@@ -61,31 +61,26 @@ const app = new Hono()
 //       return c.json({ data });
 //     }
 //   )
-//   .post(
-//     "/",
-//     clerkMiddleware(),
-//     zValidator("json", insertAccountSchema.pick({ name: true })),
-//     async (c) => {
-//       const auth = getAuth(c);
-//       const values = c.req.valid("json");
-//       if (!auth?.userId) {
-//         throw new HTTPException(401, {
-//           res: c.json(
-//             {
-//               message: "Unauthorized",
-//             },
-//             401
-//           ),
-//         });
-//       }
-//       const [data] = await db1
-//         .insert(accounts)
-//         .values({ id: createId(), userId: auth.userId, ...values })
-//         .returning();
+  .post(
+    "/",
+    zValidator("json", insertAccountSchema.pick({ name: true })),
+    async (c) => {
+      const user = await currentUser()
+      const values = c.req.valid("json");
 
-//       return c.json({ data });
-//     }
-//   )
+    if (!user?.id) {
+      throw new HTTPException(401, {
+        res: c.json({ message: "Unauthorized!" }, 401),
+      });
+    }
+      const [data] = await db1
+        .insert(accounts)
+        .values({ id: createId(), userId: user?.id, ...values })
+        .returning();
+
+      return c.json({ data });
+    }
+  )
 //   .post(
 //     "/bulk-delete",
 //     clerkMiddleware(),

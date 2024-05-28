@@ -1,6 +1,11 @@
+'use client';
 
+import { Button } from "@/components/ui/button";
+import useNewAccount from "@/features/accounts/hooks/use-new-account";
 
 export default  function Home() {
+  const { onOpen} = useNewAccount();
+
   // const {data: accounts, isLoading} = useGetAccounts();
 
   // if(isLoading) return <div>Loading...</div>
@@ -13,6 +18,9 @@ export default  function Home() {
         <p>A Simple Authentication</p>
         <p className="text-3xl text-rose-700">This is protected Page!</p>
         <div>
+          <Button onClick={onOpen} className="text-sm">Add new Account</Button>
+
+
           {/* {accounts?.map((account) => (
             <div key={account.id}>
               {account.name}

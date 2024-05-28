@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Inter } from "next/font/google";
 
 import { QueryProvider } from "@/providers/query-provider";
+import { SheetProvider } from "@/providers/sheet-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,8 +31,9 @@ export default async function RootLayout({
     <SessionProvider session={session}>
     <html lang="en">
       <body className={inter.className}>
-          <Toaster />
         <QueryProvider>
+          <SheetProvider />
+          <Toaster />
           {children}
         </QueryProvider>
       </body>
