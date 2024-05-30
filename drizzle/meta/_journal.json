@@ -8,6 +8,13 @@
       "when": 1716575123044,
       "tag": "0000_mighty_gorgon",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1717070046082,
+      "tag": "0001_friendly_thunderbolt_ross",
+      "breakpoints": true
     }
   ]
 }

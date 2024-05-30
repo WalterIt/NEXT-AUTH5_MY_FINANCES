@@ -163,7 +163,8 @@ const app = new Hono()
       const [data] = await db1
         .delete(accounts)
         .where(and(eq(accounts.id, id), eq(accounts.userId, user.id)))
-        .returning();
+        .returning({
+          id: accounts.id,});
       if (!data) {
         return c.json({ error: "Not found" }, 404);
       }

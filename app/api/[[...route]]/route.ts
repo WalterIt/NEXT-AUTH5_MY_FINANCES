@@ -9,6 +9,7 @@ import GitHub from "@auth/core/providers/github"
 import Google from "@auth/core/providers/google"
 
 import accounts from './accounts'
+import categories from './categories'
 
 
 export const runtime = 'edge';
@@ -25,31 +26,8 @@ app.onError((err, c) => {
 
 const routes = app
   .route('/accounts', accounts)
+  .route('/categories', categories)
 
-// const app = new Hono()
-
-
-// import categories from "./categories";
-// import transactions from "./transactions";
-
-// app.route('/accounts', accounts)
-
-
-
-// app.get('/hello', (c) => {
-//   return c.json({
-//     message: 'Hello Next.js 14 with Hono!',
-//   })
-// })
-// .get('/hello/:name', 
-// zValidator("param", z.object({ name: z.string() })
-// )
-// ,(c) => {
-//   const { name } = c.req.valid("param")
-//   return c.json({
-//     message: `Hello,  ${name}!`,
-//   })
-// })
 
 // app.use("*", initAuthConfig(c=>({
 //   secret: c.env.AUTH_SECRET,
