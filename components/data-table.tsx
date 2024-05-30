@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-// import { useConfirm } from "@/hooks/use-confirm";
+import { useConfirm } from "@/hooks/use-confirm";
 import React from "react";
 
 interface DataTableProps<TData, TValue> {
@@ -42,10 +42,10 @@ export function DataTable<TData, TValue>({
   onDelete,
   disabled,
 }: DataTableProps<TData, TValue>) {
-  // const [ConfirmationDialog, confirm] = useConfirm(
-  //   "Are you sure?",
-  //   "You are about to delete a bulk of data?"
-  // );
+  const [ConfirmationDialog, confirm] = useConfirm(
+    "Are you sure?",
+    "You are about to delete  THIS or THESE ACCOUNTS?"
+  );
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
   const [rowSelection, setRowSelection] = React.useState({});
@@ -69,7 +69,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      {/* <ConfirmationDialog /> */}
+      <ConfirmationDialog />
       <div className="flex items-center py-4">
         <Input
           placeholder={`Filter by ${filterKey}`}

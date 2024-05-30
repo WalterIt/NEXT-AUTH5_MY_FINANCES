@@ -32,41 +32,43 @@ const app = new Hono()
       .where(eq(accounts.userId, user?.id));
     return c.json({data});
   })
-//   .get(
-//     "/:id",
-//     clerkMiddleware(),
-//     zValidator("param", z.object({ id: z.string().optional() })),
-//     async (c) => {
-//       const auth = getAuth(c);
-//       const { id } = c.req.valid("param");
-//       if (!auth?.userId) {
-//         throw new HTTPException(401, {
-//           res: c.json({ message: "Unauthorized" }, 401),
-//         });
-//       }
-//       if (!id) {
-//         return c.json({ error: "Invalid id" }, 400);
-//       }
-//       const [data] = await db1
-//         .select({
-//           id: accounts.id,
-//           name: accounts.name,
-//         })
-//         .from(accounts)
-//         .where(and(eq(accounts.id, id), eq(accounts.userId, auth.userId)));
+  .get(
+    "/:id",
+    zValidator("param", z.object({ id: z.string().optional() })),
+    async (c) => {
+      const user = await currentUser()
+      const { id } = c.req.valid("param");
 
-//       if (!data) {
-//         return c.json({ error: "Not found" }, 400);
-//       }
-//       return c.json({ data });
-//     }
-//   )
+      if (!user?.id) {
+        throw new HTTPException(401, {
+          res: c.json({ message: "Unauthorized!" }, 401),
+        });
+      }
+
+      if (!id) {
+        return c.json({ error: "Invalid id!" }, 400);
+      }
+      
+      const [data] = await db1
+        .select({
+          id: accounts.id,
+          name: accounts.name,
+        })
+        .from(accounts)
+        .where(and(eq(accounts.id, id), eq(accounts.userId, user.id)));
+
+      if (!data) {
+        return c.json({ error: "Not found!" }, 400);
+      }
+      return c.json({ data });
+    }
+  )
   .post(
     "/",
     zValidator("json", insertAccountSchema.pick({ name: true })),
     async (c) => {
-      const user = await currentUser()
       const values = c.req.valid("json");
+      const user = await currentUser()
 
     if (!user?.id) {
       throw new HTTPException(401, {
@@ -81,100 +83,92 @@ const app = new Hono()
       return c.json({ data });
     }
   )
-//   .post(
-//     "/bulk-delete",
-//     clerkMiddleware(),
-//     zValidator("json", z.object({ ids: z.array(z.string()) })),
-//     async (c) => {
-//       const auth = getAuth(c);
-//       if (!auth?.userId) {
-//         throw new HTTPException(401, {
-//           res: c.json(
-//             {
-//               message: "Unauthorized",
-//             },
-//             401
-//           ),
-//         });
-//       }
-//       const values = c.req.valid("json");
-//       const data = await db1
-//         .delete(accounts)
-//         .where(
-//           and(
-//             eq(accounts.userId, auth?.userId),
-//             inArray(accounts.id, values.ids)
-//           )
-//         )
-//         .returning({
-//           id: accounts.id,
-//         });
-//       return c.json({ data });
-//     }
-//   )
-//   .patch(
-//     "/:id",
-//     clerkMiddleware(),
-//     zValidator("param", z.object({ id: z.string().optional() })),
-//     zValidator("json", insertAccountSchema.pick({ name: true })),
-//     async (c) => {
-//       const auth = getAuth(c);
-//       if (!auth?.userId) {
-//         throw new HTTPException(401, {
-//           res: c.json(
-//             {
-//               message: "Unauthorized",
-//             },
-//             401
-//           ),
-//         });
-//       }
-//       const values = c.req.valid("json");
-//       const { id } = c.req.valid("param");
-//       if (!id) {
-//         return c.json({ error: "Invalid id" }, 400);
-//       }
-//       const [data] = await db1
-//         .update(accounts)
-//         .set(values)
-//         .where(and(eq(accounts.id, id), eq(accounts.userId, auth.userId)))
-//         .returning();
+  .post(
+    "/bulk-delete",
+    zValidator("json", z.object({ ids: z.array(z.string()) })),
+    async (c) => {
+      const values = c.req.valid("json");
+      const user = await currentUser()
 
-//       if (!data) {
-//         return c.json({ error: "Not found" }, 404);
-//       }
-//       return c.json({ data });
-//     }
-//   )
-//   .delete(
-//     "/:id",
-//     clerkMiddleware(),
-//     zValidator("param", z.object({ id: z.string().optional() })),
-//     async (c) => {
-//       const auth = getAuth(c);
-//       if (!auth?.userId) {
-//         throw new HTTPException(401, {
-//           res: c.json(
-//             {
-//               message: "Unauthorized",
-//             },
-//             401
-//           ),
-//         });
-//       }
-//       const { id } = c.req.valid("param");
-//       if (!id) {
-//         return c.json({ error: "Invalid id" }, 400);
-//       }
-//       const [data] = await db1
-//         .delete(accounts)
-//         .where(and(eq(accounts.id, id), eq(accounts.userId, auth.userId)))
-//         .returning();
-//       if (!data) {
-//         return c.json({ error: "Not found" }, 404);
-//       }
-//       return c.json({ data });
-//     }
-//   );
+      if (!user?.id) {
+        throw new HTTPException(401, {
+          res: c.json({ message: "Unauthorized!" }, 401),
+        });
+      }
+
+
+      const data = await db1
+        .delete(accounts)
+        .where(
+          and(
+            eq(accounts.userId, user?.id),
+            inArray(accounts.id, values.ids)
+          )
+        )
+        .returning({
+          id: accounts.id,
+        });
+      return c.json({ data });
+    }
+  )
+  .patch(
+    "/:id",
+    zValidator("param", z.object({ id: z.string().optional() })),
+    zValidator("json", insertAccountSchema.pick({ name: true })),
+    async (c) => {
+      const values = c.req.valid("json");
+      const { id } = c.req.valid("param");
+      const user = await currentUser()
+
+      if (!user?.id) {
+        throw new HTTPException(401, {
+          res: c.json({ message: "Unauthorized!" }, 401),
+        });
+      }
+
+
+      if (!id) {
+        return c.json({ error: "Invalid id" }, 400);
+      }
+
+      const [data] = await db1
+        .update(accounts)
+        .set(values)
+        .where(and(eq(accounts.id, id), eq(accounts.userId, user.id)))
+        .returning();
+
+      if (!data) {
+        return c.json({ error: "Not found!" }, 404);
+      }
+      return c.json({ data });
+    }
+  )
+  .delete(
+    "/:id",
+    zValidator("param", z.object({ id: z.string().optional() })),
+    async (c) => {
+      const user = await currentUser()
+
+      if (!user?.id) {
+        throw new HTTPException(401, {
+          res: c.json({ message: "Unauthorized!" }, 401),
+        });
+      }
+
+      const { id } = c.req.valid("param");
+      if (!id) {
+        return c.json({ error: "Invalid id" }, 400);
+      }
+
+      const [data] = await db1
+        .delete(accounts)
+        .where(and(eq(accounts.id, id), eq(accounts.userId, user.id)))
+        .returning();
+      if (!data) {
+        return c.json({ error: "Not found" }, 404);
+      }
+      return c.json({ data });
+    }
+  );
 
 export default app;

@@ -17,7 +17,7 @@ export const useCreateAccount = () => {
       return await res.json();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["accounts"] });
+      queryClient.invalidateQueries({ queryKey: ["accounts"] }); // refetch accounts
       toast.success("Account created!");
     },
     onError: () => {
