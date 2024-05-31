@@ -3,7 +3,7 @@
 import { Loader2, Plus } from "lucide-react";
 
 // categories hooks
-import { useNewCategory } from "@/features/categories/hooks";
+import { useNewCategory } from "@/features/categories/hooks/";
 // categories api
 import { useGetCategories, useBulkDeleteCategories } from "@/features/categories/api";
 

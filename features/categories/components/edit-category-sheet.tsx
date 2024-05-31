@@ -15,8 +15,7 @@ import {
   useGetCategory,
   useDeleteCategory,
 } from "@/features/categories/api";
-// import useGetcategory from "@/features/categorys/api/use-get-category";
-// import useDeletecategory from "@/features/categorys/api/use-delete-category";
+
 import { useOpenCategory } from "@/features/categories/hooks/use-open-category";
 import { useConfirm } from "@/hooks/use-confirm";
 import { Loader2 } from "lucide-react";

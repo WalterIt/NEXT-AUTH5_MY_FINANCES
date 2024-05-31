@@ -14,3 +14,4 @@ export const useOpenCategory = create<OpenCategoryState>((set) => ({
   onClose: () => set({ isOpen: false, id: undefined }),
 }));
 
+export default useOpenCategory;
