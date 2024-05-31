@@ -10,6 +10,7 @@ import Google from "@auth/core/providers/google"
 
 import accounts from './accounts'
 import categories from './categories'
+import transactions from './transactions'
 
 
 export const runtime = 'edge';
@@ -27,6 +28,7 @@ app.onError((err, c) => {
 const routes = app
   .route('/accounts', accounts)
   .route('/categories', categories)
+  .route('/transactions', transactions)
 
 
 // app.use("*", initAuthConfig(c=>({

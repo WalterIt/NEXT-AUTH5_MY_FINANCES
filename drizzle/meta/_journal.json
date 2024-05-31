@@ -15,6 +15,13 @@
       "when": 1717070046082,
       "tag": "0001_friendly_thunderbolt_ross",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1717166116066,
+      "tag": "0002_lyrical_harrier",
+      "breakpoints": true
     }
   ]
 }
