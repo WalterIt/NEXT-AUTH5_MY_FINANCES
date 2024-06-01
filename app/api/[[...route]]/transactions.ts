@@ -130,6 +130,27 @@ const app = new Hono()
     }
   )
   .post(
+    "/bulk-create",
+    zValidator("json", z.array(insertTransactionSchema.omit({ id: true }))),
+    async (c) => {
+      const user = await currentUser()
+
+      if (!user?.id) {
+        throw new HTTPException(401, {
+          res: c.json({ message: "Unauthorized!" }, 401),
+        });
+      } 
+
+      const values = c.req.valid("json");
+      const data = await db1
+        .insert(transactions)
+        .values(values.map((value) => ({ id: createId(), ...value })))
+        .returning();
+        
+      return c.json({ data });
+    }
+  )
+  .post(
     "/bulk-delete",
     zValidator("json", z.object({ ids: z.array(z.string()) })),
     async (c) => {
@@ -140,6 +161,7 @@ const app = new Hono()
           res: c.json({ message: "Unauthorized!" }, 401),
         });
       }
+
       const { ids } = c.req.valid("json");
       if (!ids) {
         throw new HTTPException(400, {
