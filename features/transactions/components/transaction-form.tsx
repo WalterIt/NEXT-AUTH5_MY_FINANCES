@@ -14,10 +14,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-// import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/textarea";
 import { Select } from "@/components/select";
 import { DatePicker } from "@/components/date-picker";
-// import { AmountInput } from "@/components/amount-input";
+import { AmountInput } from "@/components/amount-input";
 import {
   convertAmountFromMiliunits,
   convertAmountToMiliunits,
@@ -150,14 +150,14 @@ export const TransactionForm = ({
                 <Input
                   disabled={disabled}
                   {...field}
-                  placeholder="Add a payee"
+                  placeholder="Add a Payee"
                 />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        {/* <FormField
+        <FormField
           control={form.control}
           name="amount"
           render={({ field }) => (
@@ -173,7 +173,7 @@ export const TransactionForm = ({
               <FormMessage />
             </FormItem>
           )}
-        />
+        /> 
         <FormField
           control={form.control}
           name="notes"
@@ -191,7 +191,7 @@ export const TransactionForm = ({
               <FormMessage />
             </FormItem>
           )}
-        /> */}
+        /> 
 
         <Button type="submit" disabled={disabled} className="w-full">
           {id ? "Save Changes" : "Create Transaction"}

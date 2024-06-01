@@ -18,12 +18,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
 import { useState } from "react";
-import UploadButton from "./upload-button";
-import ImportCard from "./import-card";
+// import UploadButton from "./upload-button";
+// import ImportCard from "./import-card";
 
 import { transactions as transactionsSchema } from "@/db/schema";
 // account hook
-import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
+// import { useSelectAccount } from "@/features/accounts/hooks/use-select-account";
 import { toast } from "sonner";
 
 enum VARIANT {
@@ -45,7 +45,7 @@ const TransactionsPage = () => {
   const transactions = transactionsQuery.data || [];
 
   const isDisabled = deleteTransaction.isPending || transactionsQuery.isLoading;
-  const [AccountDialog, confirm] = useSelectAccount();
+  // const [AccountDialog, confirm] = useSelectAccount();
   const [variant, setVariant] = useState<VARIANT>(VARIANT.LIST);
   const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
@@ -62,19 +62,20 @@ const TransactionsPage = () => {
   const onSubmitImport = async (
     values: (typeof transactionsSchema.$inferInsert)[]
   ) => {
-    const accountId = await confirm() as string;
-    if (!accountId) toast.error("Please select an account to continue!");
-    const data = values.map((transaction) => ({
-      ...transaction,
-      accountId,
-    }));
-    bulkCreateTransaction.mutate(data, {
-      onSuccess: () => {
-        onCancelUpload();
-        toast.success("Transactions imported successfully");
-      },
-      onError: () => toast.error("Failed to import transactions"),
-    });
+    // const accountId = await confirm() as string;
+    // if (!accountId) toast.error("Please select an account to continue!");
+    // const data = values.map((transaction) => ({
+    //   ...transaction,
+    //   accountId,
+    // }));
+
+    // bulkCreateTransaction.mutate(data, {
+    //   onSuccess: () => {
+    //     onCancelUpload();
+    //     toast.success("Transactions imported successfully");
+    //   },
+    //   onError: () => toast.error("Failed to import transactions"),
+    // });
   };
 
 
@@ -97,12 +98,12 @@ const TransactionsPage = () => {
   if (variant === VARIANT.IMPORT) {
     return (
       <>
-        <AccountDialog />
+        {/* <AccountDialog />
         <ImportCard
           data={importResults.data}
           onCancel={onCancelUpload}
           onSubmit={onSubmitImport}
-        />
+        /> */}
       </>
     );
   }
@@ -122,7 +123,7 @@ const TransactionsPage = () => {
               <Plus className="mr-2 size-4" />
               Add new
             </Button>
-            <UploadButton onUpload={onUpload} />
+            {/* <UploadButton onUpload={onUpload} /> */}
           </div>
         </CardHeader>
         <CardContent>

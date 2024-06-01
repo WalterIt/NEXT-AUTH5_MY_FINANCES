@@ -12,8 +12,8 @@ import { Actions } from "./actions";
 import { formatDate } from "date-fns";
 import { formatCurrency } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { AccountColumn } from "./account-column";
-import { CategoryColumn } from "./category-column";
+// import { AccountColumn } from "./account-column";
+// import { CategoryColumn } from "./category-column";
 
 export type ResponseType = InferResponseType<
   typeof client.api.transactions.$get,
@@ -76,11 +76,12 @@ export const columns: ColumnDef<ResponseType>[] = [
     },
     cell: ({ row }) => {
       return (
-        <CategoryColumn
-          id={row.original.id}
-          category={row.original.category}
-          categoryId={row.original.categoryId}
-        />
+        <></>
+        // <CategoryColumn
+        //   id={row.original.id}
+        //   category={row.original.category}
+        //   categoryId={row.original.categoryId}
+        // />
       );
     },
   },
@@ -115,7 +116,7 @@ export const columns: ColumnDef<ResponseType>[] = [
       const amount = row.getValue("amount") as number;
       return (
         <Badge
-          variant={amount > 0 ? "primary" : "destructive"}
+          variant={amount > 0 ? "default" : "destructive"}
           className="text-sm font-medium px-3.5 py-1.5"
         >
           {formatCurrency(amount)}
@@ -138,10 +139,11 @@ export const columns: ColumnDef<ResponseType>[] = [
     },
     cell: ({ row }) => {
       return (
-        <AccountColumn
-          account={row.original.account}
-          accountId={row.original.accountId}
-        />
+        <></>
+        // <AccountColumn
+        //   account={row.original.account}
+        //   accountId={row.original.accountId}
+        // />
       );
     },
   },
