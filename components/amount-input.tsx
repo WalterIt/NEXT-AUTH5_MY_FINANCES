@@ -45,7 +45,7 @@ export const AmountInput = ({
               )}
               onClick={onReverseValue}
             >
-              {!parsedValue && <Info className="size-3 text-white" />}
+              {!parsedValue && <Info className="size-3 text-white" />} 
 
               {isIncome && <PlusCircle className="size-3 text-white" />}
               {isExpense && <MinusCircle className="size-3 text-white" />}

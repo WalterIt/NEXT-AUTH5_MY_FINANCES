@@ -25,7 +25,7 @@ import { Loader2 } from "lucide-react";
 
 export const NewTransactionSheet = () => {
   const { isOpen, onClose } = useNewTransaction();
-  const mutation = useCreateTransaction();
+  const transactionMutation = useCreateTransaction();
   const categoriesQuery = useGetCategories();
   const categoryMutation = useCreateCategory();
 
@@ -47,14 +47,14 @@ export const NewTransactionSheet = () => {
   }));
 
   const isPending =
-    mutation.isPending ||
+    transactionMutation.isPending ||
     categoryMutation.isPending ||
     accountMutation.isPending;
 
   const isLoading = categoriesQuery.isLoading || accountsQuery.isLoading;
 
-  const onSubmit = (formValues: ApiValues) => {
-    mutation.mutate(formValues, {
+  const onSubmit = (formValues: ApiValues) => { 
+    transactionMutation.mutate(formValues, {
       onSuccess: () => {
         onClose();
       },
