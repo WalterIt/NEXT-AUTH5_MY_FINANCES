@@ -1,19 +1,19 @@
 "use client";
-// icons
-import { ArrowUpDown } from "lucide-react";
-// components
-import { Button } from "@/components/ui/button";
-import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
 
+import { format } from "date-fns";
 import { InferResponseType } from "hono";
+import { ArrowUpDown } from "lucide-react";
+import { ColumnDef } from "@tanstack/react-table";
+
 import { client } from "@/lib/hono";
-import { Actions } from "./actions";
-import { formatDate } from "date-fns";
 import { formatCurrency } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-// import { AccountColumn } from "./account-column";
-// import { CategoryColumn } from "./category-column";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+
+import { Actions } from "./actions";
+import { AccountColumn } from "./account-column";
+import { CategoryColumn } from "./category-column";
 
 export type ResponseType = InferResponseType<
   typeof client.api.transactions.$get,
@@ -52,13 +52,13 @@ export const columns: ColumnDef<ResponseType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Date
-          <ArrowUpDown className="ml-2 size-4" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const date = row.getValue("date") as Date;
-      return <span>{formatDate(date, "dd MMMM, yyyy")}</span>;
+      return <span>{format(date, "dd MMMM, yyyy")}</span>;
     },
   },
   {
@@ -70,18 +70,17 @@ export const columns: ColumnDef<ResponseType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Category
-          <ArrowUpDown className="ml-2 size-4" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       return (
-        <></>
-        // <CategoryColumn
-        //   id={row.original.id}
-        //   category={row.original.category}
-        //   categoryId={row.original.categoryId}
-        // />
+        <CategoryColumn
+          id={row.original.id}
+          category={row.original.category}
+          categoryId={row.original.categoryId}
+        />
       );
     },
   },
@@ -94,7 +93,7 @@ export const columns: ColumnDef<ResponseType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Payee
-          <ArrowUpDown className="ml-2 size-4" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -108,16 +107,16 @@ export const columns: ColumnDef<ResponseType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Amount
-          <ArrowUpDown className="ml-2 size-4" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
-      const amount = row.getValue("amount") as number;
+      const amount = parseFloat(row.getValue("amount"));
       return (
         <Badge
-          variant={amount > 0 ? "default" : "destructive"}
-          className="text-sm font-medium px-3.5 py-1.5"
+          variant={amount < 0 ? "destructive" : "primary"}
+          className="text-xs font-medium px-3.5 py-2.5  "
         >
           {formatCurrency(amount)}
         </Badge>
@@ -133,24 +132,21 @@ export const columns: ColumnDef<ResponseType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Account
-          <ArrowUpDown className="ml-2 size-4" />
+          <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       return (
-        <></>
-        // <AccountColumn
-        //   account={row.original.account}
-        //   accountId={row.original.accountId}
-        // />
+        <AccountColumn
+          account={row.original.account}
+          accountId={row.original.accountId}
+        />
       );
     },
   },
   {
     id: "actions",
-    cell: ({ row }) => {
-      return <Actions id={row.original.id} />;
-    },
+    cell: ({ row }) => <Actions id={row.original.id} />,
   },
 ];

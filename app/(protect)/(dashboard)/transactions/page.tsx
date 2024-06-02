@@ -18,7 +18,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
 import { useState } from "react";
-// import UploadButton from "./upload-button";
+import UploadButton from "./upload-button";
 // import ImportCard from "./import-card";
 
 import { transactions as transactionsSchema } from "@/db/schema";
@@ -123,7 +123,7 @@ const TransactionsPage = () => {
               <Plus className="mr-2 size-4" />
               Add new
             </Button>
-            {/* <UploadButton onUpload={onUpload} /> */}
+            <UploadButton onUpload={onUpload} /> 
           </div>
         </CardHeader>
         <CardContent>

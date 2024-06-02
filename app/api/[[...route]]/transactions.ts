@@ -33,12 +33,13 @@ const app = new Hono()
           res: c.json({ message: "Unauthorized!" }, 401),
         });
       }
+      
       const { from, to, accountId } = c.req.valid("query");
+
       const defaultTo = new Date();
       const defaultFrom = subDays(defaultTo, 90);
-      const startDate = from
-        ? parse(from, "yyyy-MM-dd", new Date())
-        : defaultFrom;
+
+      const startDate = from ? parse(from, "yyyy-MM-dd", new Date()) : defaultFrom;
       const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
 
       const data = await db1
@@ -59,7 +60,7 @@ const app = new Hono()
         .where(
           and(
             accountId ? eq(transactions.accountId, accountId) : undefined,
-            eq(accounts.id, user?.id),
+            eq(accounts.userId, user?.id),
             gte(transactions.date, startDate),
             lte(transactions.date, endDate)
           )
