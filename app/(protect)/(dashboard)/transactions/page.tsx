@@ -19,7 +19,7 @@ import { DataTable } from "@/components/data-table";
 import { columns } from "./columns";
 import { useState } from "react";
 import UploadButton from "./upload-button";
-// import ImportCard from "./import-card";
+import ImportCard from "./import-card";
 
 import { transactions as transactionsSchema } from "@/db/schema";
 // account hook
@@ -50,6 +50,7 @@ const TransactionsPage = () => {
   const [importResults, setImportResults] = useState(INITIAL_IMPORT_RESULTS);
 
   const onUpload = (results: typeof INITIAL_IMPORT_RESULTS) => {
+    console.log({results});
     setVariant(VARIANT.IMPORT);
     setImportResults(results);
   };
@@ -95,15 +96,16 @@ const TransactionsPage = () => {
         </Card>
       </div>
     );
+
   if (variant === VARIANT.IMPORT) {
     return (
       <>
-        {/* <AccountDialog />
+        {/* <AccountDialog /> */}
         <ImportCard
           data={importResults.data}
           onCancel={onCancelUpload}
           onSubmit={onSubmitImport}
-        /> */}
+        /> 
       </>
     );
   }
