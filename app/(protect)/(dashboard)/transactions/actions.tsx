@@ -18,7 +18,7 @@ export const Actions = ({ id }: { id: string }) => {
   const { onOpen } = useOpenTransaction();
   const [ConfirmationDialog, confirm] = useConfirm(
     "Delete Transaction",
-    "Are you sure you want to delete this transaction?"
+    "Are you sure you want to Delete this Transaction?"
   );
   const handleDelete = async () => {
     const ok = await confirm();

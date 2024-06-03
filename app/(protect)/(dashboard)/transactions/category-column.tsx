@@ -32,7 +32,7 @@ export const CategoryColumn = ({ id, category, categoryId }: Props) => {
         !category && "text-rose-500"
       )}
     >
-      {!category && <TriangleAlert />}
+      {!category && <TriangleAlert className="mr-2 size-4 shrink-0"/>}
       {category || "Uncategorized"}
     </div>
   );
