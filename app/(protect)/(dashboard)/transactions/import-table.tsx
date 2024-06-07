@@ -6,7 +6,7 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table";
-//   import TableHeadSelect from "./table-head-select";
+  import TableHeadSelect from "./table-head-select";
   
   type Props = {
     headers: string[];
@@ -27,14 +27,12 @@ import {
           <TableHeader className="bg-muted">
             <TableRow>
               {headers.map((header, index) => (
-                <TableHead key={index}>
-                    <p>Table Head</p>
-                  {index}
-                  {/* <TableHeadSelect
+                <TableHead key={index}>                  
+                  <TableHeadSelect
                     columnIndex={index}
                     selectedColumns={selectedColumns}
                     onChange={onTableHeadSelectChange}
-                  /> */}
+                  />
                 </TableHead>
               ))}
             </TableRow>

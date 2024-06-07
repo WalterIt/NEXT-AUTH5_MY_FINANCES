@@ -33,7 +33,7 @@ enum VARIANT {
 
 const INITIAL_IMPORT_RESULTS = {
   data: [],
-  error: [],
+  errors: [],
   meta: {},
 };
 

@@ -16,12 +16,12 @@ interface SelectedColumnsState {
 }
 
 type Props = {
+  data: string[][];
   onCancel: () => void;
   onSubmit: (data: any) => void;
-  data: string[][];
 };
 
-const ImportCard = ({ onCancel, onSubmit, data }: Props) => {
+const  ImportCard = ({ onCancel, onSubmit, data }: Props) => {
   const headers = data[0];
   const body = data.slice(1);
   const [selectedColumns, setSelectedColumns] = useState<SelectedColumnsState>({});
@@ -47,7 +47,9 @@ const ImportCard = ({ onCancel, onSubmit, data }: Props) => {
     });
   };
 
-  const onContinue = () => {
+  const progress = Object.values(selectedColumns).filter(Boolean).length;
+
+  const handleContinue = () => {
     const getColumnIndex = (column: string) => {
       return column.split("_")[1];
     };
@@ -63,22 +65,25 @@ const ImportCard = ({ onCancel, onSubmit, data }: Props) => {
             const columnIndex = getColumnIndex(`column_${index}`);
             return selectedColumns[`column_${columnIndex}`] ? cell : null;
           });
-          return transformedRow.every((cell) => cell === null)
-            ? []
-            : transformedRow;
+
+          return transformedRow.every((cell) => cell === null) ? [] : transformedRow;
         })
         .filter((row) => row.length > 0),
     };
 
+    // console.log(mappedData)
+
     const arrayOfData = mappedData.body.map((row) => {
-      return row.reduce((acc: any, curr, index) => {
+      return row.reduce((acc: any, cell, index) => {
         const header = mappedData.headers[index];
         if (header !== null) {
-          acc[header] = curr;
+          acc[header] = cell;
         }
         return acc;
       }, {});
     });
+
+    // console.log({arrayOfData})
 
     const formatedData = arrayOfData.map((row) => ({
       ...row,
@@ -88,6 +93,7 @@ const ImportCard = ({ onCancel, onSubmit, data }: Props) => {
 
     onSubmit(formatedData);
   };
+
   return (
     <div className="max-w-screen-2xl mx-auto w-full pb-10 -mt-24">
       <Card className="border-none drop-shadow-sm">
@@ -101,15 +107,12 @@ const ImportCard = ({ onCancel, onSubmit, data }: Props) => {
             </Button>
 
             <Button
-              disabled={
-                Object.keys(selectedColumns).length < requiredOptions.length
-              }
-              size={"sm"}
+              disabled={ progress < requiredOptions.length }
+              size="sm"
               className="w-full lg:w-auto"
-              onClick={onContinue}
+              onClick={handleContinue}
             >
-              Continue ({Object.keys(selectedColumns).filter(Boolean).length}/
-              {requiredOptions.length})
+              Continue ({progress} / {requiredOptions.length})
             </Button>
           </div>
         </CardHeader>

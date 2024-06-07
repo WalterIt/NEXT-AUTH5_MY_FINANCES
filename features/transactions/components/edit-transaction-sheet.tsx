@@ -119,7 +119,7 @@ export const EditTransactionSheet = () => {
         <SheetContent className="space-y-4">
           <SheetHeader>
             <SheetTitle>Edit Transaction</SheetTitle>
-            <SheetDescription>Edit an existing transaction</SheetDescription>
+            <SheetDescription>Edit an existing Transaction.</SheetDescription>
           </SheetHeader>
           {isLoading ? (
             <div className="absolute inset-0 flex items-center justify-center">
@@ -133,7 +133,7 @@ export const EditTransactionSheet = () => {
               onDelete={onDelete}
               disabled={isPending}
               categoryOptions={categoryOptions}
-              onCreateCategory={onCreateCategory}
+              onCreateCategory={onCreateCategory} 
               accountOptions={accountOptions}
               onCreateAccount={onCreateAccount}
             />
