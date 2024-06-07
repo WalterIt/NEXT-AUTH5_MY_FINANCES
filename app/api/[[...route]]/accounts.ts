@@ -15,14 +15,13 @@ const app = new Hono()
   .get("/", async (c) => {
     
     const user = await currentUser()
-    // console.log('FROM ACCOUNTS: ', user)
-
 
     if (!user?.id) {
       throw new HTTPException(401, {
         res: c.json({ message: "Unauthorized!" }, 401),
       });
     }
+    
     const data = await db1
       .select({
         id: accounts.id,
