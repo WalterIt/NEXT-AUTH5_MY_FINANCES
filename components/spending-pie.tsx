@@ -1,8 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PieChart, Target, Radar, FileSearch, Loader2 } from "lucide-react";
-import AreaVariant from "@/components/area-variant";
-import BarVariant from "./bar-variant";
-import LineVariant from "./line-variant";
+
 import { useState } from "react";
 import {
   Select,
@@ -22,6 +20,7 @@ type Props = {
     name: string;
   }[];
 };
+
 enum ChartType {
   Pie = "pie",
   Radar = "radar",
@@ -33,11 +32,11 @@ export const SpendingPie = ({ data = [] }: Props) => {
   const onChangeType = (type: ChartType) => {
     setChartType(type);
   };
+  
   return (
     <Card className="border-none drop-shadow-sm">
       <CardHeader className="flex space-y-2 lg:space-y-0 lg:flex-row lg:items-center justify-between">
         <CardTitle className="text-xl line-clamp-1">Categories</CardTitle>
-        {/* TODO add select */}
         <Select defaultValue={chartType} onValueChange={onChangeType}>
           <SelectTrigger className="lg:w-auto h-9 rounded-md">
             <SelectValue placeholder="Select chart type" />
@@ -78,9 +77,7 @@ export const SpendingPie = ({ data = [] }: Props) => {
             {chartType === ChartType.Radar && <RadarVariant data={data} />}
             {chartType === ChartType.Radial && <RadialVariant data={data} />}
           </>
-          // chartType === "bar" && <BarVariant data={data} />
-          // <BarVariant data={data} />
-          // <LineVariant data={data} />
+
         )}
       </CardContent>
     </Card>

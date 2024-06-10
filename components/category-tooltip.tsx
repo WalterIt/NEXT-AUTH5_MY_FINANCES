@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-// import { Separator } from "./ui/separator";
+import { Separator } from "./ui/separator";
 import { convertAmountFromMiliunits, formatCurrency } from "@/lib/utils";
 
 const CategoryTooltip = ({ active, payload }: any) => {
@@ -12,7 +12,7 @@ const CategoryTooltip = ({ active, payload }: any) => {
       <div className="text-sm p-2 px-3 bg-muted text-muted-foreground">
         {name}
       </div>
-      {/* <Separator /> */}
+      <Separator />
       <div className="p-2 px-3 space-y-1">
         <div className="flex items-center justify-between gap-x-4">
           <div className="flex items-center gap-x-2">

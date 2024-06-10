@@ -1,13 +1,10 @@
 import {
-    Tooltip,
-    XAxis,
     ResponsiveContainer,
     RadialBar,
     RadialBarChart,
     Legend,
   } from "recharts";
   import { formatCurrency, formatPercentage } from "@/lib/utils";
-  import CategoryTooltip from "@/components/category-tooltip";
   
   const COLORS = ["#0062FF", "#12C6FF", "#FF647F", "#FF9354"];
   

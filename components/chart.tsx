@@ -79,9 +79,7 @@ export const Chart = ({ data = [] }: Props) => {
             {chartType === "bar" && <BarVariant data={data} />}
             {chartType === "line" && <LineVariant data={data} />}
           </>
-          // chartType === "bar" && <BarVariant data={data} />
-          // <BarVariant data={data} />
-          // <LineVariant data={data} />
+
         )}
       </CardContent>
     </Card>
