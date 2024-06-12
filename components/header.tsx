@@ -2,10 +2,11 @@
 
 import {HeaderLogo} from '@/components/header-logo'
 import { Navigation } from '@/components/navigation'
-// import { Loader2 } from 'lucide-react'
+import { Loader2 } from 'lucide-react'
 import { WelcomeMsg } from '@/components/welcome-msg'
 import { UserButton } from './auth/user-button'
 import { useCurrentUser } from '@/hooks/use-current-user'
+import Filters from './filters'
 
 export const Header = () => {
   const user = useCurrentUser();
@@ -22,12 +23,11 @@ export const Header = () => {
           </div>
           <div className="space-y-6 text-center  text-white/90">
           <UserButton />
-          
           </div>
-
-            {/* <Loader2 className="size-8 animate-spin text-slate-400" /> */}
+            <Loader2 className="size-8 animate-spin text-slate-400" />
         </div>
         <WelcomeMsg />
+        <Filters />
       </div>
     </header>
   )
