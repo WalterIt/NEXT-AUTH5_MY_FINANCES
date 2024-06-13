@@ -24,7 +24,7 @@ export const Header = () => {
           <div className="space-y-6 text-center  text-white/90">
           <UserButton />
           </div>
-            <Loader2 className="size-8 animate-spin text-slate-400" />
+            {/* <Loader2 className="size-8 animate-spin text-slate-400" /> */}
         </div>
         <WelcomeMsg />
         <Filters />
