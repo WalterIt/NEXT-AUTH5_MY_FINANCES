@@ -41,12 +41,7 @@ export default async function RootLayout({
         <QueryProvider>
           <SheetProvider />
           <Toaster />
-          <SignedOut>
-          <SignInButton />
-        </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
+          
           {children}
         </QueryProvider>
       </body>

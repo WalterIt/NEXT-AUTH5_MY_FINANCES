@@ -1,15 +1,13 @@
 'use client'
 
+import { Loader2 } from "lucide-react";
+import { UserButton, ClerkLoaded, ClerkLoading } from "@clerk/nextjs";
 import {HeaderLogo} from '@/components/header-logo'
 import { Navigation } from '@/components/navigation'
-import { Loader2 } from 'lucide-react'
 import { WelcomeMsg } from '@/components/welcome-msg'
-import { UserButton } from './auth/user-button'
-import { useCurrentUser } from '@/hooks/use-current-user'
 import Filters from './filters'
 
 export const Header = () => {
-  const user = useCurrentUser();
   
   return (
     <header 
@@ -22,7 +20,12 @@ export const Header = () => {
             <Navigation />
           </div>
           <div className="space-y-6 text-center  text-white/90">
-          <UserButton />
+          <ClerkLoaded>
+          <UserButton afterSignOutUrl="/" />
+        </ClerkLoaded>
+        <ClerkLoading>
+          <Loader2 className="size-6 text-muted-foreground animate-spin" />
+        </ClerkLoading>
           </div>
             {/* <Loader2 className="size-8 animate-spin text-slate-400" /> */}
         </div>
