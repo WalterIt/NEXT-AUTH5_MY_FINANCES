@@ -1,7 +1,14 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
+// import { SessionProvider } from "next-auth/react";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignedIn,
+  SignedOut,
+  UserButton
+} from '@clerk/nextjs'
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { Inter } from "next/font/google";
@@ -28,17 +35,23 @@ export default async function RootLayout({
   const session = await auth()
 
   return (
-    <SessionProvider session={session}>
+    <ClerkProvider>
     <html lang="en">
       <body className={inter.className}>
         <QueryProvider>
           <SheetProvider />
           <Toaster />
+          <SignedOut>
+          <SignInButton />
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
           {children}
         </QueryProvider>
       </body>
     </html>
-    </SessionProvider>
+    </ClerkProvider>
   
   );
 }
