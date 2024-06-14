@@ -1,17 +1,16 @@
-version: "3.8"
 
 services:
   app:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: local_finances
+    container_name: local_finances_v0.3.7
     ports:
       - 3000:3000
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
-      
+    
 
   database:
     image: postgres:latest
@@ -28,6 +27,7 @@ services:
       
   adminer:
     image: adminer
+    container_name: adminer_local_finances
     restart: always
     depends_on:
       - database
@@ -36,4 +36,6 @@ services:
 
 volumes:
   db-local-finances:
+    labels:
+      created_at: '2024-06-14'
   
