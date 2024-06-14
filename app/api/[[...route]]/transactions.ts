@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { db1 } from "@/db/drizzle";
+import { db } from "@/db/drizzle";
 import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 import { createId } from "@paralleldrive/cuid2";
@@ -12,7 +12,7 @@ import {
   insertTransactionSchema,
 } from "@/db/schema";
 import { eq, inArray, and, gte, lte, desc, sql } from "drizzle-orm";
-import { currentUser } from "@/lib/custom-auth"; 
+import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 
 const app = new Hono()
   .get(
@@ -25,10 +25,11 @@ const app = new Hono()
         accountId: z.string().optional(),
       })
     ),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -42,7 +43,7 @@ const app = new Hono()
       const startDate = from ? parse(from, "yyyy-MM-dd", new Date()) : defaultFrom;
       const endDate = to ? parse(to, "yyyy-MM-dd", new Date()) : defaultTo;
 
-      const data = await db1
+      const data = await db
         .select({
           id: transactions.id,
           date: transactions.date,
@@ -60,7 +61,7 @@ const app = new Hono()
         .where(
           and(
             accountId ? eq(transactions.accountId, accountId) : undefined,
-            eq(accounts.userId, user?.id),
+            eq(accounts.userId, auth.userId),
             gte(transactions.date, startDate),
             lte(transactions.date, endDate)
           )
@@ -72,11 +73,12 @@ const app = new Hono()
   .get(
     "/:id",
     zValidator("param", z.object({ id: z.string().optional() })),
+    clerkMiddleware(),
     async (c) => {
       const { id } = c.req.valid("param");
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -88,7 +90,7 @@ const app = new Hono()
         });
       }
 
-      const [data] = await db1
+      const [data] = await db
         .select({
           id: transactions.id,
           date: transactions.date,
@@ -100,7 +102,7 @@ const app = new Hono()
         })
         .from(transactions)
         .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-        .where(and(eq(transactions.id, id), eq(accounts.userId, user?.id)));
+        .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)));
       if (!data) {
         throw new HTTPException(404, {
           res: c.json({ message: "Transaction not found" }, 404),
@@ -112,17 +114,18 @@ const app = new Hono()
   .post(
     "/",
     zValidator("json", insertTransactionSchema.omit({ id: true })),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
       }
       const values = c.req.valid("json");
 
-      const [data] = await db1
+      const [data] = await db
         .insert(transactions)
         .values({ id: createId(), ...values })
         .returning();
@@ -133,17 +136,18 @@ const app = new Hono()
   .post(
     "/bulk-create",
     zValidator("json", z.array(insertTransactionSchema.omit({ id: true }))),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
       } 
 
       const values = c.req.valid("json");
-      const data = await db1
+      const data = await db
         .insert(transactions)
         .values(values.map((value) => ({ id: createId(), ...value })))
         .returning();
@@ -154,10 +158,11 @@ const app = new Hono()
   .post(
     "/bulk-delete",
     zValidator("json", z.object({ ids: z.array(z.string()) })),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -170,19 +175,19 @@ const app = new Hono()
         });
       }
        
-      const transactionsToDelete = db1.$with("transactions_to_delete").as(
-        db1
+      const transactionsToDelete = db.$with("transactions_to_delete").as(
+        db
           .select({
             id: transactions.id,
           })
           .from(transactions)
           .innerJoin(accounts, eq(transactions.accountId, accounts.id))
           .where(
-            and(inArray(transactions.id, ids), eq(accounts.userId, user?.id))
+            and(inArray(transactions.id, ids), eq(accounts.userId, auth.userId))
           )
       );
 
-      const data = await db1
+      const data = await db
         .with(transactionsToDelete)
         .delete(transactions)
         .where(
@@ -202,10 +207,11 @@ const app = new Hono()
     "/:id",
     zValidator("param", z.object({ id: z.string() })),
     zValidator("json", insertTransactionSchema.omit({ id: true })),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -218,17 +224,17 @@ const app = new Hono()
       }
       const values = c.req.valid("json");
 
-      const transactionToUpdate = db1.$with("transaction_to_update").as(
-        db1
+      const transactionToUpdate = db.$with("transaction_to_update").as(
+        db
           .select({
             id: transactions.id,
           })
           .from(transactions)
           .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-          .where(and(eq(transactions.id, id), eq(accounts.userId, user?.id)))
+          .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)))
       );
 
-      const [data] = await db1
+      const [data] = await db
         .with(transactionToUpdate)
         .update(transactions)
         .set(values)
@@ -248,10 +254,11 @@ const app = new Hono()
   .delete(
     "/:id",
     zValidator("param", z.object({ id: z.string().optional() })),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -263,17 +270,17 @@ const app = new Hono()
         });
       }
 
-      const transactionToDelete = db1.$with("transaction_to_delete").as(
-        db1
+      const transactionToDelete = db.$with("transaction_to_delete").as(
+        db
           .select({
             id: transactions.id,
           })
           .from(transactions)
           .innerJoin(accounts, eq(transactions.accountId, accounts.id))
-          .where(and(eq(transactions.id, id), eq(accounts.userId, user?.id)))
+          .where(and(eq(transactions.id, id), eq(accounts.userId, auth.userId)))
       );
 
-      const [data] = await db1
+      const [data] = await db
         .with(transactionToDelete)
         .delete(transactions)
         .where(

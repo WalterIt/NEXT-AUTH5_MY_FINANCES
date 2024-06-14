@@ -4,11 +4,11 @@ import { Hono } from "hono";
 import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 import { subDays, parse, differenceInDays } from "date-fns";
-import { db1 } from "@/db/drizzle";
+import { db } from "@/db/drizzle";
 import { accounts, categories, transactions } from "@/db/schema";
 import { and, desc, eq, gte, lt, lte, sql, sum } from "drizzle-orm";
 import { calculatePercentage, fillMissingDays } from "@/lib/utils";
-import { currentUser } from "@/lib/custom-auth"; 
+import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 
 const app = new Hono().get(
   "/",
@@ -20,10 +20,11 @@ const app = new Hono().get(
       accountId: z.string().optional(),
     })
   ),
-  async (c) => {
-    const user = await currentUser()
+  clerkMiddleware(),
+    async (c) => {
+    const auth = getAuth(c);
 
-    if (!user?.id) {
+    if(!auth?.userId) {
       throw new HTTPException(401, {
         res: c.json({ message: "Unauthorized!" }, 401),
       });
@@ -44,7 +45,7 @@ const app = new Hono().get(
       startedDate: Date,
       endDate: Date
     ) {
-      return await db1
+      return await db
         .select({
           income:
             sql`SUM(CASE WHEN ${transactions.amount} >= 0 THEN ${transactions.amount} ELSE 0 END)`.mapWith(
@@ -69,12 +70,12 @@ const app = new Hono().get(
     }
 
     const [currentPeriod] = await fetchFinancialData(
-      user.id,
+      auth?.userId,
       startDate,
       endDate
     );
     const [lastPeriod] = await fetchFinancialData(
-      user.id,
+      auth?.userId,
       lastPeriodStart,
       lastPeriodEnd
     );
@@ -85,7 +86,7 @@ const app = new Hono().get(
 
     const remainingChange = calculatePercentage(currentPeriod.remaining, lastPeriod.remaining );
 
-    const category = await db1
+    const category = await db
       .select({
         name: categories.name,
         value: sql`SUM(ABS(${transactions.amount}))`.mapWith(Number),
@@ -96,7 +97,7 @@ const app = new Hono().get(
       .where(
         and(
           accountId ? eq(accounts.id, accountId) : undefined,
-          eq(accounts.userId, user.id),
+          eq(accounts.userId, auth?.userId),
           lt(transactions.amount, 0),
           gte(transactions.date, startDate),
           lte(transactions.date, endDate)
@@ -114,7 +115,7 @@ const app = new Hono().get(
       finalCategories.push({ name: "Other", value: otherSum });
     }
 
-    const activeDays = await db1
+    const activeDays = await db
       .select({
         date: transactions.date,
         income:
@@ -131,7 +132,7 @@ const app = new Hono().get(
       .where(
         and(
           accountId ? eq(accounts.id, accountId) : undefined,
-          eq(accounts.userId, user.id),
+          eq(accounts.userId, auth?.userId),
           gte(transactions.date, startDate),
           lte(transactions.date, endDate)
         )

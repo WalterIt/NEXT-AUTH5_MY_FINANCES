@@ -1,44 +1,46 @@
 import { Hono } from "hono";
-import { db1 } from "@/db/drizzle";
+import { db } from "@/db/drizzle";
 import { eq, inArray, and } from "drizzle-orm";
 import { accounts, insertAccountSchema } from "@/db/schema";
-// import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
+import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
-import { currentUser } from "@/lib/custom-auth"; 
 import { getUserById } from "@/data/user";
 
 
 const app = new Hono()
-  .get("/", async (c) => {
-    
-    const user = await currentUser()
+  .get("/", clerkMiddleware(), 
+    async (c) => {
+    const auth = getAuth(c);
 
-    if (!user?.id) {
+    if(!auth?.userId) {
       throw new HTTPException(401, {
         res: c.json({ message: "Unauthorized!" }, 401),
       });
     }
     
-    const data = await db1
+    
+    const data = await db
       .select({
         id: accounts.id,
         name: accounts.name,
       })
       .from(accounts)
-      .where(eq(accounts.userId, user?.id));
+      .where(eq(accounts.userId, auth.userId));
     return c.json({data});
   })
   .get(
     "/:id",
     zValidator("param", z.object({ id: z.string().optional() })),
+    clerkMiddleware(),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
       const { id } = c.req.valid("param");
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -48,13 +50,13 @@ const app = new Hono()
         return c.json({ error: "Invalid id!" }, 400);
       }
       
-      const [data] = await db1
+      const [data] = await db
         .select({
           id: accounts.id,
           name: accounts.name,
         })
         .from(accounts)
-        .where(and(eq(accounts.id, id), eq(accounts.userId, user.id)));
+        .where(and(eq(accounts.id, id), eq(accounts.userId, auth?.userId)));
 
       if (!data) {
         return c.json({ error: "Not found!" }, 400);
@@ -65,18 +67,20 @@ const app = new Hono()
   .post(
     "/",
     zValidator("json", insertAccountSchema.pick({ name: true })),
+    clerkMiddleware(),
+    clerkMiddleware(),
     async (c) => {
       const values = c.req.valid("json");
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-    if (!user?.id) {
+    if(!auth?.userId) {
       throw new HTTPException(401, {
         res: c.json({ message: "Unauthorized!" }, 401),
       });
     }
-      const [data] = await db1
+      const [data] = await db
         .insert(accounts)
-        .values({ id: createId(), userId: user?.id, ...values })
+        .values({ id: createId(), userId: auth.userId, ...values })
         .returning();
 
       return c.json({ data });
@@ -85,22 +89,23 @@ const app = new Hono()
   .post(
     "/bulk-delete",
     zValidator("json", z.object({ ids: z.array(z.string()) })),
+    clerkMiddleware(),
     async (c) => {
       const values = c.req.valid("json");
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
       }
 
 
-      const data = await db1
+      const data = await db
         .delete(accounts)
         .where(
           and(
-            eq(accounts.userId, user?.id),
+            eq(accounts.userId, auth.userId),
             inArray(accounts.id, values.ids)
           )
         )
@@ -114,12 +119,13 @@ const app = new Hono()
     "/:id",
     zValidator("param", z.object({ id: z.string().optional() })),
     zValidator("json", insertAccountSchema.pick({ name: true })),
+    clerkMiddleware(),
     async (c) => {
       const values = c.req.valid("json");
       const { id } = c.req.valid("param");
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -130,10 +136,10 @@ const app = new Hono()
         return c.json({ error: "Invalid id" }, 400);
       }
 
-      const [data] = await db1
+      const [data] = await db
         .update(accounts)
         .set(values)
-        .where(and(eq(accounts.id, id), eq(accounts.userId, user.id)))
+        .where(and(eq(accounts.id, id), eq(accounts.userId, auth?.userId)))
         .returning();
 
       if (!data) {
@@ -145,10 +151,11 @@ const app = new Hono()
   .delete(
     "/:id",
     zValidator("param", z.object({ id: z.string().optional() })),
+    clerkMiddleware(),
     async (c) => {
-      const user = await currentUser()
+      const auth = getAuth(c);
 
-      if (!user?.id) {
+      if (!auth?.userId) {
         throw new HTTPException(401, {
           res: c.json({ message: "Unauthorized!" }, 401),
         });
@@ -159,9 +166,9 @@ const app = new Hono()
         return c.json({ error: "Invalid id" }, 400);
       }
 
-      const [data] = await db1
+      const [data] = await db
         .delete(accounts)
-        .where(and(eq(accounts.id, id), eq(accounts.userId, user.id)))
+        .where(and(eq(accounts.id, id), eq(accounts.userId, auth?.userId)))
         .returning({
           id: accounts.id,});
       if (!data) {
