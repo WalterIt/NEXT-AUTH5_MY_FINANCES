@@ -4,7 +4,7 @@ services:
     build: 
       context: .
       dockerfile: Dockerfile
-    container_name: local_finances_v0.3.6
+    container_name: local_finances_v0.3.7
     ports:
       - 3000:3000
     volumes:
@@ -36,4 +36,6 @@ services:
 
 volumes:
   db-local-finances:
+    labels:
+      created_at: '2024-06-14'
   
