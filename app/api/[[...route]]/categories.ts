@@ -30,9 +30,8 @@ const app = new Hono()
   })
   .get(
     "/:id",
-    
-    zValidator("param", z.object({ id: z.string().optional() })),
     clerkMiddleware(),
+    zValidator("param", z.object({ id: z.string().optional() })),
     async (c) => {
       const { id } = c.req.valid("param");
       const auth = getAuth(c);
@@ -65,9 +64,8 @@ const app = new Hono()
   )
   .post(
     "/",
-    
-    zValidator("json", insertCategorySchema.pick({ name: true })),
     clerkMiddleware(),
+    zValidator("json", insertCategorySchema.pick({ name: true })),
     async (c) => {
       const auth = getAuth(c);
 
@@ -87,9 +85,8 @@ const app = new Hono()
   )
   .post(
     "/bulk-delete",
-    
-    zValidator("json", z.object({ ids: z.array(z.string()) })),
     clerkMiddleware(),
+    zValidator("json", z.object({ ids: z.array(z.string()) })),
     async (c) => {
       const auth = getAuth(c);
 
@@ -118,10 +115,9 @@ const app = new Hono()
   )
   .patch(
     "/:id",
-    
+    clerkMiddleware(),
     zValidator("param", z.object({ id: z.string() })),
     zValidator("json", insertCategorySchema.pick({ name: true })),
-    clerkMiddleware(),
     async (c) => {
       const auth = getAuth(c);
 
@@ -154,9 +150,8 @@ const app = new Hono()
   )
   .delete(
     "/:id",
-    
-    zValidator("param", z.object({ id: z.string().optional() })),
     clerkMiddleware(),
+    zValidator("param", z.object({ id: z.string().optional() })),
     async (c) => {
       const auth = getAuth(c);
 

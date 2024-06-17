@@ -7,7 +7,7 @@ import { HTTPException } from "hono/http-exception";
 import { zValidator } from "@hono/zod-validator";
 import { createId } from "@paralleldrive/cuid2";
 import { z } from "zod";
-import { getUserById } from "@/data/user";
+// import { getUserById } from "@/data/user";
 
 
 const app = new Hono()
@@ -29,16 +29,18 @@ const app = new Hono()
       })
       .from(accounts)
       .where(eq(accounts.userId, auth.userId));
+      
     return c.json({data});
   })
   .get(
     "/:id",
+    clerkMiddleware(),
     zValidator("param", z.object({ id: z.string().optional() })),
-    clerkMiddleware(),
-    clerkMiddleware(),
     async (c) => {
       const auth = getAuth(c);
       const { id } = c.req.valid("param");
+
+      console.log(auth)
 
       if (!auth?.userId) {
         throw new HTTPException(401, {
@@ -66,9 +68,8 @@ const app = new Hono()
   )
   .post(
     "/",
+    clerkMiddleware(),
     zValidator("json", insertAccountSchema.pick({ name: true })),
-    clerkMiddleware(),
-    clerkMiddleware(),
     async (c) => {
       const values = c.req.valid("json");
       const auth = getAuth(c);
@@ -78,18 +79,18 @@ const app = new Hono()
         res: c.json({ message: "Unauthorized!" }, 401),
       });
     }
-      const [data] = await db
-        .insert(accounts)
-        .values({ id: createId(), userId: auth.userId, ...values })
-        .returning();
+    const [data] = await db
+      .insert(accounts)
+      .values({ id: createId(), userId: auth?.userId, ...values })
+      .returning();
 
-      return c.json({ data });
+    return c.json({ data });
     }
   )
   .post(
     "/bulk-delete",
-    zValidator("json", z.object({ ids: z.array(z.string()) })),
     clerkMiddleware(),
+    zValidator("json", z.object({ ids: z.array(z.string()) })),
     async (c) => {
       const values = c.req.valid("json");
       const auth = getAuth(c);
@@ -117,9 +118,9 @@ const app = new Hono()
   )
   .patch(
     "/:id",
+    clerkMiddleware(),
     zValidator("param", z.object({ id: z.string().optional() })),
     zValidator("json", insertAccountSchema.pick({ name: true })),
-    clerkMiddleware(),
     async (c) => {
       const values = c.req.valid("json");
       const { id } = c.req.valid("param");
@@ -150,8 +151,8 @@ const app = new Hono()
   )
   .delete(
     "/:id",
-    zValidator("param", z.object({ id: z.string().optional() })),
     clerkMiddleware(),
+    zValidator("param", z.object({ id: z.string().optional() })),
     async (c) => {
       const auth = getAuth(c);
 

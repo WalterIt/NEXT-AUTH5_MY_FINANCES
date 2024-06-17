@@ -17,6 +17,7 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 const app = new Hono()
   .get(
     "/",
+    clerkMiddleware(),
     zValidator(
       "query",
       z.object({
@@ -25,7 +26,6 @@ const app = new Hono()
         accountId: z.string().optional(),
       })
     ),
-    clerkMiddleware(),
     async (c) => {
       const auth = getAuth(c);
 
@@ -72,8 +72,8 @@ const app = new Hono()
   )
   .get(
     "/:id",
-    zValidator("param", z.object({ id: z.string().optional() })),
     clerkMiddleware(),
+    zValidator("param", z.object({ id: z.string().optional() })),
     async (c) => {
       const { id } = c.req.valid("param");
       const auth = getAuth(c);
@@ -113,8 +113,8 @@ const app = new Hono()
   )
   .post(
     "/",
-    zValidator("json", insertTransactionSchema.omit({ id: true })),
     clerkMiddleware(),
+    zValidator("json", insertTransactionSchema.omit({ id: true })),
     async (c) => {
       const auth = getAuth(c);
 
@@ -135,8 +135,8 @@ const app = new Hono()
   )
   .post(
     "/bulk-create",
-    zValidator("json", z.array(insertTransactionSchema.omit({ id: true }))),
     clerkMiddleware(),
+    zValidator("json", z.array(insertTransactionSchema.omit({ id: true }))),
     async (c) => {
       const auth = getAuth(c);
 
@@ -157,8 +157,8 @@ const app = new Hono()
   )
   .post(
     "/bulk-delete",
-    zValidator("json", z.object({ ids: z.array(z.string()) })),
     clerkMiddleware(),
+    zValidator("json", z.object({ ids: z.array(z.string()) })),
     async (c) => {
       const auth = getAuth(c);
 
@@ -205,9 +205,9 @@ const app = new Hono()
   )
   .patch(
     "/:id",
+    clerkMiddleware(),
     zValidator("param", z.object({ id: z.string() })),
     zValidator("json", insertTransactionSchema.omit({ id: true })),
-    clerkMiddleware(),
     async (c) => {
       const auth = getAuth(c);
 
@@ -253,8 +253,8 @@ const app = new Hono()
   )
   .delete(
     "/:id",
-    zValidator("param", z.object({ id: z.string().optional() })),
     clerkMiddleware(),
+    zValidator("param", z.object({ id: z.string().optional() })),
     async (c) => {
       const auth = getAuth(c);
 

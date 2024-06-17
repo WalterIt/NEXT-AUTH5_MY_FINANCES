@@ -4,12 +4,8 @@ import "./globals.css";
 // import { SessionProvider } from "next-auth/react";
 import {
   ClerkProvider,
-  SignInButton,
-  SignedIn,
-  SignedOut,
-  UserButton
 } from '@clerk/nextjs'
-import { auth } from "@/auth";
+// import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
 import { Inter } from "next/font/google";
 
@@ -32,7 +28,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await auth()
+  // const session = await auth()
 
   return (
     <ClerkProvider>

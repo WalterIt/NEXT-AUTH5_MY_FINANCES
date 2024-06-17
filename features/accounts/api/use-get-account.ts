@@ -17,7 +17,7 @@ export const useGetAccount = (id?: string) => {
       return data;
     },
   });
-  return query;
+  return query; 
 };
 
 export default useGetAccount;

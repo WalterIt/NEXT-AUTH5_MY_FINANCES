@@ -12,6 +12,7 @@ import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 
 const app = new Hono().get(
   "/",
+  clerkMiddleware(),
   zValidator(
     "query",
     z.object({
@@ -20,7 +21,6 @@ const app = new Hono().get(
       accountId: z.string().optional(),
     })
   ),
-  clerkMiddleware(),
     async (c) => {
     const auth = getAuth(c);
 

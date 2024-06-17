@@ -27,10 +27,10 @@ const routes = [
         href: '/categories',
         label: 'Categories',
     },
-    {
-        href: '/settings',
-        label: 'Settings',
-    },
+    // {
+    //     href: '/settings',
+    //     label: 'Settings',
+    // },
 ]
 
 export const Navigation = () => {
@@ -49,7 +49,7 @@ export const Navigation = () => {
         return (
             // SIDEBAR FROM SHEET SHADCN/UI 
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
-                <SheetTrigger>
+                <SheetTrigger asChild>
                     <Button
                         variant='outline'
                         size='sm'

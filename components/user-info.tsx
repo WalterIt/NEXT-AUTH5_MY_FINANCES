@@ -29,7 +29,7 @@ export const UserInfo = ({user, label} : UserInfoProps) => {
             </div>
             <div className="flex border-2 p-2 rounded-xl text-sm justify-between">
                 <p className="font-bold">Role</p>
-                <p className="bg-slate-200 px-1">{user?.role}</p>
+                <p className="bg-slate-200 px-1">User</p>
             </div>
             {/* <div className="flex border-2 p-2 rounded-xl text-sm justify-between">
                 <p className="font-bold">TwoFactorAuthenticaiton</p>

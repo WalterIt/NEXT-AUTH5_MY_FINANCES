@@ -12,6 +12,7 @@ import accounts from './accounts'
 import categories from './categories'
 import transactions from './transactions'
 import summary from './summary'
+// import { clerkMiddleware, getAuth } from "@hono/clerk-auth";
 
 
 export const runtime = 'edge';
@@ -25,6 +26,24 @@ app.onError((err, c) => {
 
   return c.json({ message: "Internal Server Error!" }, 500);
 });
+
+
+// app.get("/hello", 
+//   clerkMiddleware(), 
+//   (c) => {
+//     const user = getAuth(c);
+
+//     if(!user?.userId) {
+//       throw new HTTPException(401, {
+//         res: c.json({ message: "Unauthorized!" }, 401),
+//       });
+//     }
+
+//     return c.json({
+//       message: "Hello, World!",
+//       UserId: user.userId
+//     })}
+// )
 
 const routes = app
   .route('/accounts', accounts)

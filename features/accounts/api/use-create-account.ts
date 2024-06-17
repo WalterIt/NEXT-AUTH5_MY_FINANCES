@@ -12,8 +12,9 @@ export const useCreateAccount = () => {
     mutationFn: async (json) => {
       const res = await client.api.accounts.$post({ json });
       if (!res.ok) {
-        throw new Error("Failed to create account");
+        throw new Error("Failed to create Account!");
       }
+       
       return await res.json();
     },
     onSuccess: () => {
@@ -21,9 +22,10 @@ export const useCreateAccount = () => {
       toast.success("Account created!");
     },
     onError: () => {
-      toast.error("Failed to create account!");
+      toast.error("Failed to create Account!");
     },
   });
+  
   return mutation;
 };
 

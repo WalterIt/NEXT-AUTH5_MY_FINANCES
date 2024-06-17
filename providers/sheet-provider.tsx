@@ -8,9 +8,16 @@ import { NewTransactionSheet } from "@/features/transactions/components/new-tran
 import { useMountedState } from "react-use";
 import { EditTransactionSheet } from "@/features/transactions/components/edit-transaction-sheet";
 
-NewTransactionSheet
 
 export const SheetProvider = () => {
+  // useMountedState(); is equal to:
+
+  // const [isMounted, setIsMounted] = useState(false);
+
+  // useEffect(() => {
+  //   setIsMounted(true);
+  // }, []);
+  
   const isMounted = useMountedState();
 
   if (!isMounted) return null;
