@@ -7,8 +7,8 @@ export default function Home() {
 
   return (
     <main className="flex flex-col justify-center items-center h-full">
-      <div className="space-y-6 text-center text-white">
-        <h1 className=" text-9xl font-bold drop-shadow-lg">Auth</h1>
+      <div className="space-y-6 text-center text-white text-lg">
+        <h1 className=" text-8xl font-semibold drop-shadow-lg">🔐 Auth</h1>
         <p>A Simple Authentication</p>
         <div>
           <LoginButton  mode="modal" asChild>

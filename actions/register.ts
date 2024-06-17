@@ -7,6 +7,7 @@ import { db } from "@/lib/db";
 import { getUserByEmail } from "@/data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "@/lib/mail";
+import { redirect } from "next/navigation";
 
 export const register = async (values: z.infer<typeof RegisterSchema>) => {
     const validateFields = RegisterSchema.safeParse(values)
@@ -37,6 +38,8 @@ export const register = async (values: z.infer<typeof RegisterSchema>) => {
     //     verificationToken.email,
     //     verificationToken.token
     // )
+
+    redirect("/login")
 
     return { success: "User Created!" }
 }
